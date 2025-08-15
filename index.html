@@ -1,338 +1,749 @@
-import React, { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
-import Two from "two.js";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Moon, Sun, Github, Link as LinkIcon, Mail, Download } from "lucide-react";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>LumaCodes → Subhajit</title>
 
-// --- Minimal Apple-like Design Philosophy ---
-// 1) Focus on whitespace, hierarchy, and restraint.
-// 2) Smooth micro‑interactions, no clutter.
-// 3) Typography first; color comes from content.
-// 4) Subtle, delightful background motion (Two.js) that never distracts.
+<!-- Hand-drawn fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Gloria+Hallelujah&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
 
-// ----- Subtle Animated Background (Two.js) -----
-function SoftBackground() {
-  const ref = useRef(null);
-  const twoRef = useRef(null);
+<style>
+  :root{
+    --paper:#fffaf2;
+    --ink:#222;
+    --crayon:#f5586a;
+    --blue:#8fd3ff;
+    --yellow:#fff2a6;
+    --mint:#d6ffde;
+    --lav:#ead9ff;
+    --shadow:rgba(0,0,0,.08);
+    --glass:rgba(255,255,255,0.6);
+    --accent:#8fd3ff;
+  }
 
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
+  /* ===== Global / paper texture ===== */
+  html,body{height:100%}
+  body{
+    margin:0;
+    background:
+      radial-gradient(1200px 800px at 20% 10%, #fffef8, transparent 60%),
+      radial-gradient(1000px 700px at 80% 90%, #fff6ee, transparent 55%),
+      url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'>\
+  <filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='1'/>\
+  <feColorMatrix type='saturate' values='0.25'/>\
+  <feComponentTransfer><feFuncA type='table' tableValues='0 0 .05 .12 .18 .05 0'/></feComponentTransfer></filter>\
+  <rect width='120' height='120' filter='url(%23n)' fill='%23f5586a' fill-opacity='0.18'/>\
+</svg>");
+    background-color:var(--paper);
+    background-blend-mode:multiply,normal,normal;
+    color:var(--ink);
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
+    scroll-behavior:smooth;
+    cursor: url('data:image/svg+xml;utf8,\
+<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"36\" height=\"36\" viewBox=\"0 0 36 36\">\
+<g transform=\"rotate(-20 18 18)\">\
+<path d=\"M6 4 L26 18 L6 28 Z\" fill=\"#222\" stroke=\"#222\" stroke-width=\"1\"/>\
+<rect x=\"25\" y=\"16\" width=\"6\" height=\"4\" rx=\"1\" fill=\"#f5586a\" stroke=\"#222\"/>\
+</g></svg>') 4 2, auto;
+  }
 
-    const two = new Two({ type: Two.Types.canvas, fitted: true, autostart: true }).appendTo(el);
-    twoRef.current = two;
+  /* ===== Music Player Styles ===== */
+  #music-icon {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 1000;
+    background: var(--yellow);
+    border: 2px solid var(--ink);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 3px 3px 0 var(--shadow);
+    transition: all 0.2s ease;
+  }
 
-    // Create a softly pulsing network of dots connected by lines.
-    const dots = [];
-    const lines = [];
-    const cols = 16;
-    const rows = 10;
+  #music-icon:hover {
+    transform: scale(1.1) rotate(5deg);
+  }
 
-    const padding = 60;
-    const gw = () => Math.max(800, el.clientWidth);
-    const gh = () => Math.max(600, el.clientHeight);
+  #music-player {
+    position: fixed;
+    top: 70px;
+    right: 20px;
+    width: 300px;
+    background: var(--paper);
+    border: 3px solid var(--ink);
+    border-radius: 16px;
+    padding: 15px;
+    box-shadow: 8px 8px 0 var(--shadow);
+    display: none;
+    z-index: 1000;
+  }
 
-    const makeGrid = () => {
-      dots.splice(0, dots.length);
-      lines.splice(0, lines.length);
-      two.clear();
+  #music-player h3 {
+    font-family: 'Permanent Marker', cursive;
+    margin-top: 0;
+    border-bottom: 2px dashed var(--ink);
+    padding-bottom: 8px;
+  }
 
-      const w = gw();
-      const h = gh();
-      const dx = (w - padding * 2) / (cols - 1);
-      const dy = (h - padding * 2) / (rows - 1);
+  #playlist {
+    max-height: 200px;
+    overflow-y: auto;
+    margin-bottom: 15px;
+    border: 2px dashed var(--ink);
+    border-radius: 12px;
+    padding: 5px;
+    background: rgba(255,255,255,0.6);
+  }
 
-      for (let j = 0; j < rows; j++) {
-        for (let i = 0; i < cols; i++) {
-          const x = padding + i * dx + (Math.random() - 0.5) * 8;
-          const y = padding + j * dy + (Math.random() - 0.5) * 8;
-          const c = two.makeCircle(x, y, 1.8);
-          c.noStroke();
-          c.fill = "rgba(100,100,120,0.35)";
-          c.original = { x, y };
-          dots.push(c);
-        }
-      }
+  .song-item {
+    padding: 8px;
+    cursor: pointer;
+    border-bottom: 1px solid var(--shadow);
+    font-family: 'Gloria Hallelujah', cursive;
+    transition: all 0.2s ease;
+    border-radius: 8px;
+  }
 
-      // Connect to right and bottom neighbors for a soft lattice
-      const index = (i, j) => j * cols + i;
-      for (let j = 0; j < rows; j++) {
-        for (let i = 0; i < cols; i++) {
-          if (i < cols - 1) {
-            const l = two.makeLine(dots[index(i, j)].translation.x, dots[index(i, j)].translation.y, dots[index(i + 1, j)].translation.x, dots[index(i + 1, j)].translation.y);
-            l.linewidth = 0.7;
-            l.stroke = "rgba(120,120,140,0.25)";
-            lines.push(l);
-          }
-          if (j < rows - 1) {
-            const l = two.makeLine(dots[index(i, j)].translation.x, dots[index(i, j)].translation.y, dots[index(i, j + 1)].translation.x, dots[index(i, j + 1)].translation.y);
-            l.linewidth = 0.7;
-            l.stroke = "rgba(120,120,140,0.18)";
-            lines.push(l);
-          }
-        }
-      }
-    };
+  .song-item:hover {
+    background: var(--lav);
+    transform: translateX(5px);
+  }
 
-    makeGrid();
+  .song-item.playing {
+    background: var(--blue);
+    font-weight: bold;
+  }
 
-    let t = 0;
-    two.bind("update", () => {
-      t += 0.005;
-      const w = gw();
-      const h = gh();
-      // gentle parallax drift
-      dots.forEach((c, idx) => {
-        const ox = c.original.x;
-        const oy = c.original.y;
-        const k = 0.8 + (idx % 17) * 0.005;
-        c.translation.x = ox + Math.sin(t * k + idx) * 3;
-        c.translation.y = oy + Math.cos(t * k + idx) * 3;
-      });
+  .controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
 
-      // keep canvas sized
-      if (two.width !== w || two.height !== h) {
-        two.width = w; two.height = h; makeGrid();
-      }
+  .controls button {
+    flex: 1;
+    background: var(--yellow);
+    border: 2px solid var(--ink);
+    border-radius: 12px;
+    padding: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    box-shadow: 3px 3px 0 var(--shadow);
+    transition: all 0.2s ease;
+  }
+
+  .controls button:hover {
+    transform: translateY(-2px);
+    box-shadow: 5px 5px 0 var(--shadow);
+  }
+
+  #now-playing {
+    font-family: 'Permanent Marker', cursive;
+    color: var(--crayon);
+  }
+
+  /* Rest of your existing styles... */
+  .section{
+    min-height:100svh;
+    display:grid;
+    place-items:center;
+    padding: clamp(24px, 3vw, 56px);
+    position:relative;
+    overflow:hidden;
+  }
+
+  .card{
+    width:min(1150px, 92vw);
+    background:#fffefa;
+    border:3px solid #222;
+    border-radius:24px;
+    box-shadow: 8px 8px 0 var(--shadow), 16px 16px 0 #00000010;
+    padding: clamp(28px, 4vw, 56px);
+    position:relative;
+    isolation:isolate;
+  }
+  .card::before, .card::after{
+    content:"";
+    position:absolute; inset:0;
+    border:3px dashed #222; border-radius:26px;
+    transform: translate(8px,8px) rotate(-.7deg);
+    opacity:.45; pointer-events:none; mix-blend-mode:multiply;
+  }
+  .card::after{
+    transform: translate(-8px,-8px) rotate(.6deg);
+    border-color:#000000aa; opacity:.25;
+  }
+
+  /* ===== HERO typing ===== */
+  .typewrap{
+    display:inline-flex; align-items:flex-end; gap:.25rem;
+    background:#fffdf6; border:2px solid #1d1d1d; border-radius:16px;
+    padding:.5rem 1rem; box-shadow: 4px 4px 0 #00000012;
+  }
+  .type{
+    font: 900 clamp(2.4rem, 7vw, 5rem)/1 "Permanent Marker", cursive;
+    letter-spacing:.5px; white-space:nowrap; overflow:hidden;
+    text-shadow:
+      0.5px 0.5px 0 var(--shadow),
+      -0.5px 0.5px 0 var(--shadow),
+      0 0 1px #00000030;
+  }
+  .cursor{
+    width:1ch; height:1.2em; display:inline-block;
+    border-right: 6px solid var(--crayon);
+    transform: translateY(8px) rotate(-1.5deg);
+    filter: drop-shadow(0 0 1px var(--crayon));
+    animation: blink .65s steps(1) infinite;
+    margin-left:.12rem;
+  }
+  @keyframes blink { 50%{opacity:0;} }
+
+  .hint{
+    margin-top:18px;
+    font: 700 clamp(1rem, 2.2vw, 1.25rem) "Gloria Hallelujah", cursive;
+    transform:rotate(-1deg);
+  }
+
+  /* down arrows */
+  .down-arrows{
+    position:absolute; left:50%; bottom:22px; translate:-50% 0;
+    display:flex; gap:18px; pointer-events:none;
+  }
+  .wiggle{ animation: wiggle 2.2s ease-in-out infinite; }
+  .wiggle:nth-child(2){ animation-delay:.25s; }
+  .wiggle:nth-child(3){ animation-delay:.5s; }
+  @keyframes wiggle{
+    0%,100%{ transform: translateY(0) rotate(-2deg); }
+    50%{ transform: translateY(8px) rotate(2deg); }
+  }
+
+  /* ===== Section entrance animations (left/right) ===== */
+  .slide-in{ opacity:0; transform: translateX(var(--x,60px)); transition: transform 900ms cubic-bezier(.2,.7,0,1), opacity 900ms ease; }
+  .slide-in.active{ opacity:1; transform: translateX(0); }
+
+  /* ===== BENTO grid ===== */
+  .bento{
+    display:grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: clamp(12px, 2vw, 18px);
+    margin-top: 10px;
+  }
+  .tile{
+    grid-column: span 4;
+    background:#fff;
+    border:3px solid #222; border-radius:18px;
+    box-shadow: 6px 6px 0 #00000018;
+    padding:18px;
+    position:relative;
+    transform: rotate(var(--r,-1.2deg));
+    transition: transform .2s ease;
+    cursor:pointer;
+  }
+  .tile:hover{ transform: rotate(.8deg) translateY(-2px); }
+  .tile .title{
+    font: 800 1.35rem/1.1 "Permanent Marker", cursive;
+    margin:0 0 6px;
+  }
+  .tile .desc{
+    font: 1rem/1.6 "Gloria Hallelujah", cursive;
+  }
+  .tile.yellow{ background:var(--yellow); }
+  .tile.blue{ background:var(--blue); }
+  .tile.mint{ background:var(--mint); }
+  .tile.lav{ background:var(--lav); }
+  .tile::before{
+    content:""; position:absolute; width:42px; height:18px; top:-10px; left:18px;
+    background: linear-gradient(#ffe, #ffc);
+    border:2px solid #222; border-radius:6px;
+    transform: rotate(-4deg);
+    box-shadow: 2px 2px 0 #00000020;
+  }
+
+  /* ===== Popover (tile details) ===== */
+  .popover{
+    position:fixed; inset:0; background:rgba(0,0,0,.4);
+    display:none; align-items:center; justify-content:center; z-index:50;
+    padding:20px;
+  }
+  .popover.open{ display:flex; }
+  .popcard{
+    max-width:760px; width:min(92vw,760px);
+    background:#fffefa; border:3px solid #222; border-radius:18px;
+    box-shadow: 10px 10px 0 #00000030; padding:22px;
+  }
+  .popcard h3{ font:800 1.6rem "Permanent Marker", cursive; margin:0 0 10px; }
+  .popcard p{ font:1.02rem/1.7 "Gloria Hallelujah", cursive; margin:0; }
+  .closebtn{
+    position:absolute; right:18px; top:12px;
+    font:800 1.2rem "Permanent Marker", cursive; background:#fff; border:3px solid #222; border-radius:10px; padding:.25rem .55rem; cursor:pointer;
+    box-shadow: 4px 4px 0 #00000022;
+  }
+
+  /* ===== About content ===== */
+  .about-text{ max-width:70ch; margin:0 auto 14px; font: 1.06rem/1.75 "Gloria Hallelujah", cursive; }
+  .actions{ margin-top:18px; display:flex; gap:12px; flex-wrap:wrap; justify-content:center; }
+  .btn{
+    --bg:#fff; background:var(--bg);
+    border:3px solid #222; border-radius:14px;
+    padding:.65rem 1rem; font: 700 1rem "Gloria Hallelujah", cursive;
+    color:#111; text-decoration:none; transform: rotate(-1.2deg);
+    box-shadow: 4px 4px 0 #0000001a;
+  }
+  .btn:hover{ transform: rotate(.6deg) translateY(-2px); }
+  .btn.pink{ --bg:#ffe3ea; } .btn.blue{ --bg:#e0f1ff; } .btn.yellow{ --bg:#fff7c6; }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 1100px){ .tile{ grid-column: span 6; } }
+  @media (max-width: 700px){ 
+    .tile{ grid-column: span 12; } 
+    #music-player {
+      width: 250px;
+      right: 10px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Music Player Icon -->
+<div id="music-icon">🎵</div>
+
+<!-- Music Player -->
+<div id="music-player">
+  <h3>Luma Player</h3>
+  <div id="playlist"></div>
+  <div class="controls">
+    <button id="prev-btn">⏮</button>
+    <button id="play-btn">▶️</button>
+    <button id="next-btn">⏭</button>
+  </div>
+  <div>Now Playing: <span id="now-playing">None</span></div>
+</div>
+
+<!-- ========== HERO ========== -->
+<section id="hero" class="section">
+  <div class="card" aria-live="polite" style="text-align:center">
+    <div class="typewrap" aria-label="animated heading">
+      <span id="type" class="type"></span>
+      <span class="cursor" aria-hidden="true"></span>
+    </div>
+    <div class="hint">scroll ↓ for the ride</div>
+  </div>
+
+  <div class="down-arrows">
+    <svg class="wiggle" width="52" height="52" viewBox="0 0 52 52" fill="none" aria-hidden="true">
+      <path d="M8 12 L26 40 L44 12" stroke="#f5586a" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <svg class="wiggle" width="52" height="52" viewBox="0 0 52 52" fill="none" aria-hidden="true">
+      <path d="M8 12 L26 40 L44 12" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <svg class="wiggle" width="52" height="52" viewBox="0 0 52 52" fill="none" aria-hidden="true">
+      <path d="M8 12 L26 40 L44 12" stroke="#8fd3ff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ========== ABOUT (slides in from RIGHT first time) ========== -->
+<section id="about" class="section">
+  <div class="card slide-in" style="--x:80px">
+    <h2 style="text-align:center; font: 900 clamp(1.6rem, 3vw, 2.2rem) 'Permanent Marker', cursive; margin:0 0 10px;">
+      About — Subhajit (aka Luma)
+    </h2>
+
+    <p class="about-text">
+      Self-taught developer & creative technologist. I build clean, reliable tools and produce music.  
+      Specializing in <strong>Python</strong>, <strong>C</strong>, and <strong>Rust (WIP)</strong>. I run <strong>Gentoo</strong> with a custom kernel and contribute to open source.  
+      Also into design, video, audio engineering, and pattern-oriented problem solving. ADHD = creative advantage.  
+      If it grabs me, I go deep: new languages, DAW plugins, or low-level systems.
+    </p>
+
+    <div class="bento">
+      <div class="tile yellow" data-pop="python" style="--r:-1.2deg">
+        <h3 class="title">Python 🐍</h3>
+        <p class="desc">APIs, tools, automation, fast prototypes.</p>
+      </div>
+      <div class="tile blue" data-pop="rust" style="--r:.6deg">
+        <h3 class="title">Rust ⚙️ (WIP)</h3>
+        <p class="desc">Systems, safety, performance, CLI craft.</p>
+      </div>
+      <div class="tile mint" data-pop="music" style="--r:-.4deg">
+        <h3 class="title">Music 🎵</h3>
+        <p class="desc">Production, mixing, sound design.</p>
+      </div>
+      <div class="tile lav" data-pop="gentoo" style="--r:1.2deg">
+        <h3 class="title">Gentoo 🐧</h3>
+        <p class="desc">Custom kernel, low-level tooling, dotfiles.</p>
+      </div>
+      <div class="tile yellow" data-pop="design" style="--r:-.8deg">
+        <h3 class="title">Design/Video 🎨</h3>
+        <p class="desc">Storyboards, edits, hand-drawn UI.</p>
+      </div>
+      <div class="tile blue" data-pop="trading" style="--r:.2deg">
+        <h3 class="title">Markets 📈</h3>
+        <p class="desc">Pattern thinking & risk systems.</p>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a class="btn pink" href="https://github.com/Lumacodes" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn blue" href="https://linkedin.com/in/lumacodes" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn yellow" href="#hero">Back to top</a>
+    </div>
+  </div>
+</section>
+
+<!-- ========== PROJECTS (slides in from LEFT) ========== -->
+<section id="projects" class="section">
+  <div class="card slide-in" style="--x:-80px">
+    <h2 style="text-align:center; font: 900 clamp(1.6rem, 3vw, 2.2rem) 'Permanent Marker', cursive; margin:0 0 10px;">
+      Little Experiments
+    </h2>
+    <p class="about-text" style="text-align:center">
+      A rotating sketchbook of code + sound. (Hook this to your GitHub later.)
+    </p>
+
+    <div class="bento">
+      <div class="tile mint" style="--r:.8deg">
+        <h3 class="title">Doodle UI Kit ✏️</h3>
+        <p class="desc">CSS-only sketch borders, sticky notes, arrows.</p>
+      </div>
+      <div class="tile lav" style="--r:-.6deg">
+        <h3 class="title">Audio Sandbox 🔊</h3>
+        <p class="desc">WebAudio synth, tiny sampler, FX chain.</p>
+      </div>
+      <div class="tile yellow" style="--r:1deg">
+        <h3 class="title">CLI Toys ⌨️</h3>
+        <p class="desc">Rust + Python tools for everyday dev pain.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== CONTACT (slides UP) ========== -->
+<section id="contact" class="section">
+  <div class="card slide-in" style="--x:0; transform: translateY(60px);">
+    <h2 style="text-align:center; font: 900 clamp(1.6rem, 3vw, 2.2rem) 'Permanent Marker', cursive; margin:0 0 10px;">
+      Say Hi
+    </h2>
+    <p class="about-text" style="text-align:center">
+      📨 <strong>Subhajitdas@tuta.io</strong> — open to collabs, OSS, and playful UI experiments.
+    </p>
+    <div class="actions">
+      <a class="btn pink" href="#about">About</a>
+      <a class="btn blue" href="#projects">Projects</a>
+      <a class="btn yellow" href="#hero">Top</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Popover ===== -->
+<div id="popover" class="popover" role="dialog" aria-modal="true" aria-label="Tile details">
+  <div class="popcard">
+    <button class="closebtn" id="closePop">close</button>
+    <h3 id="popTitle">Title</h3>
+    <p id="popBody">Body</p>
+  </div>
+</div>
+
+<script>
+/* =========================
+   1) TYPE: "LumaCodes!" → backspace → "Subhajit ^_^"
+========================= */
+const typeEl = document.getElementById('type');
+const seq = [
+  { text: 'LumaCodes!', hold: 900, speed: 50 },
+  { deleteTo: 0, hold: 200, speed: 26 },
+  { text: 'Subhajit ^_^', hold: 1600, speed: 42 }
+];
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+async function typeText(t, text, speed=42){
+  for (let i=0; i<text.length; i++){
+    t.textContent += text[i];
+    await sleep(speed + Math.random()*35);
+  }
+}
+async function deleteTo(t, n=0, speed=34){
+  while (t.textContent.length > n){
+    t.textContent = t.textContent.slice(0,-1);
+    await sleep(speed + Math.random()*28);
+  }
+}
+(async function run(){
+  for (const step of seq){
+    if (step.text) await typeText(typeEl, step.text, step.speed);
+    if (step.hold) await sleep(step.hold);
+    if (step.deleteTo !== undefined) await deleteTo(typeEl, step.deleteTo, step.speed);
+  }
+})();
+
+/* =========================
+   2) FIRST SCROLL HIJACK (Apple-like snap to next)
+========================= */
+const hero = document.getElementById('hero');
+const about = document.getElementById('about');
+let hijacked = false;
+
+function goToSection(el){
+  el.scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+function handleFirstScroll(e){
+  if (hijacked) return;
+  const delta = Math.sign(e.deltaY || e.wheelDelta || -e.detail);
+  if (delta > 0 && window.scrollY < hero.offsetHeight * 0.6){
+    e.preventDefault();
+    hijacked = true;
+    goToSection(about);
+    setTimeout(() => {
+      window.removeEventListener('wheel', handleFirstScroll, { passive:false });
+      window.removeEventListener('keydown', keyHijack);
+    }, 900);
+  }
+}
+function keyHijack(e){
+  if (hijacked) return;
+  if (['ArrowDown','PageDown',' '].includes(e.key) && window.scrollY < hero.offsetHeight * 0.6){
+    e.preventDefault();
+    hijacked = true;
+    goToSection(about);
+    setTimeout(() => {
+      window.removeEventListener('wheel', handleFirstScroll, { passive:false });
+      window.removeEventListener('keydown', keyHijack);
+    }, 900);
+  }
+}
+window.addEventListener('wheel', handleFirstScroll, { passive:false });
+window.addEventListener('keydown', keyHijack);
+
+/* =========================
+   3) SECTION SLIDES (left/right/up) on view
+========================= */
+const sliders = document.querySelectorAll('.slide-in');
+const io = new IntersectionObserver(entries => {
+  entries.forEach(en => {
+    if (en.isIntersecting) {
+      en.target.classList.add('active');
+      en.target.style.transform = en.target.style.transform.includes('translateY')
+        ? 'translateY(0)' : en.target.style.transform;
+    }
+  });
+}, { threshold: 0.25 });
+sliders.forEach(s => io.observe(s));
+
+/* =========================
+   4) BENTO TILE POPOVER
+========================= */
+const pop = document.getElementById('popover');
+const popTitle = document.getElementById('popTitle');
+const popBody = document.getElementById('popBody');
+const closePop = document.getElementById('closePop');
+
+const content = {
+  python: {
+    t: 'Python 🐍',
+    b: 'APIs, data tools, automation. I ship quickly with tests and docs.'
+  },
+  rust: {
+    t: 'Rust ⚙️ (WIP)',
+    b: 'Memory safety + performance. Building CLIs and systems utilities.'
+  },
+  music: {
+    t: 'Music Production 🎵',
+    b: 'DAW workflow, synthesis, mixing. Sound design for web toys.'
+  },
+  gentoo: {
+    t: 'Gentoo Linux 🐧',
+    b: 'Custom kernel, tuned toolchains, dotfiles, reproducible setups.'
+  },
+  design: {
+    t: 'Design / Video 🎨',
+    b: 'Crayon UIs, motion, storyboards, edits. Human, playful, clear.'
+  },
+  trading: {
+    t: 'Markets 📈',
+    b: 'Risk systems, pattern thinking, data viz of signals & edges.'
+  }
+};
+
+document.querySelectorAll('.tile[data-pop]').forEach(tile => {
+  tile.addEventListener('click', () => {
+    const key = tile.dataset.pop;
+    if (!content[key]) return;
+    popTitle.textContent = content[key].t;
+    popBody.textContent = content[key].b;
+    pop.classList.add('open');
+  });
+});
+closePop.addEventListener('click', () => pop.classList.remove('open'));
+pop.addEventListener('click', (e) => { if (e.target === pop) pop.classList.remove('open'); });
+
+/* =========================
+   5) Micro parallax on mouse (cards tilt slightly)
+========================= */
+function tiltOnMove(container){
+  container.addEventListener('mousemove', (e) => {
+    const r = container.getBoundingClientRect();
+    const x = ((e.clientX - r.left)/r.width - 0.5) * 2;
+    const y = ((e.clientY - r.top)/r.height - 0.5) * 2;
+    container.style.transform = `rotateX(${(-y*2)}deg) rotateY(${(x*2)}deg)`;
+  });
+  container.addEventListener('mouseleave', () => {
+    container.style.transform = 'rotateX(0) rotateY(0)';
+  });
+}
+document.querySelectorAll('.card').forEach(tiltOnMove);
+
+/* =========================
+   6) MUSIC PLAYER
+========================= */
+// Elements
+const musicIcon = document.getElementById('music-icon');
+const musicPlayer = document.getElementById('music-player');
+const playlistEl = document.getElementById('playlist');
+const playBtn = document.getElementById('play-btn');
+const prevBtn = document.getElementById('prev-btn');
+const nextBtn = document.getElementById('next-btn');
+const nowPlayingEl = document.getElementById('now-playing');
+
+// Player state
+let audio = new Audio();
+let playlist = [];
+let currentTrackIndex = -1;
+
+// Your music library - replace these with your actual song URLs
+const myMusicLibrary = [
+  {
+    name: "Chill Coding Session",
+    url: "https://example.com/music/chill.mp3" // Replace with your actual URL
+  },
+  {
+    name: "Focus Mode", 
+    url: "https://example.com/music/focus.mp3" // Replace with your actual URL
+  },
+  {
+    name: "Debugging Jazz",
+    url: "https://example.com/music/jazz.mp3" // Replace with your actual URL
+  }
+];
+
+// Initialize player with your songs
+function initMusicPlayer() {
+  playlist = [...myMusicLibrary];
+  renderPlaylist();
+  
+  if (playlist.length > 0) {
+    currentTrackIndex = 0;
+    // Don't autoplay (browsers block this)
+    nowPlayingEl.textContent = "Ready - click play";
+  }
+}
+
+// Toggle player visibility
+musicIcon.addEventListener('click', () => {
+  musicPlayer.style.display = musicPlayer.style.display === 'block' ? 'none' : 'block';
+});
+
+// Render playlist
+function renderPlaylist() {
+  playlistEl.innerHTML = '';
+  playlist.forEach((track, index) => {
+    const item = document.createElement('div');
+    item.className = 'song-item';
+    if (index === currentTrackIndex) {
+      item.classList.add('playing');
+    }
+    item.textContent = track.name;
+    item.addEventListener('click', () => {
+      currentTrackIndex = index;
+      playTrack(currentTrackIndex);
     });
-
-    const onResize = () => {
-      two.width = gw();
-      two.height = gh();
-      makeGrid();
-    };
-
-    window.addEventListener("resize", onResize);
-    return () => {
-      window.removeEventListener("resize", onResize);
-      two.pause();
-      two.unbind("update");
-      two.clear();
-      if (el) {
-        while (el.firstChild) el.removeChild(el.firstChild);
-      }
-    };
-  }, []);
-
-  return (
-    <div ref={ref} aria-hidden className="pointer-events-none absolute inset-0 -z-10 opacity-80 [mask-image:radial-gradient(60%_60%_at_50%_40%,#000,transparent)]" />
-  );
+    playlistEl.appendChild(item);
+  });
 }
 
-// ----- Navigation -----
-function Nav({ theme, toggleTheme }) {
-  const items = [
-    { href: "#home", label: "Home" },
-    { href: "#work", label: "Work" },
-    { href: "#about", label: "About" },
-    { href: "#contact", label: "Contact" },
-  ];
-  return (
-    <div className="sticky top-0 z-20 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-neutral-900/60 border-b border-neutral-200 dark:border-neutral-800">
-      <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-        <a href="#home" className="text-xl font-semibold tracking-tight dark:text-white">luma</a>
-        <div className="flex items-center gap-6">
-          {items.map((i) => (
-            <a key={i.href} href={i.href} className="text-sm text-neutral-700 hover:text-black dark:text-neutral-300 dark:hover:text-white transition-colors">
-              {i.label}
-            </a>
-          ))}
-          <Button variant="ghost" size="icon" aria-label="Toggle theme" onClick={toggleTheme} className="rounded-2xl">
-            {theme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
-          </Button>
-        </div>
-      </nav>
-    </div>
-  );
+// Play track
+function playTrack(index) {
+  if (index < 0 || index >= playlist.length) return;
+  
+  currentTrackIndex = index;
+  const track = playlist[currentTrackIndex];
+  
+  audio.src = track.url;
+  audio.play()
+    .then(() => {
+      nowPlayingEl.textContent = track.name;
+      playBtn.textContent = '⏸';
+      renderPlaylist();
+    })
+    .catch(err => {
+      console.error("Error playing audio:", err);
+      nowPlayingEl.textContent = "Error playing: " + track.name;
+    });
 }
 
-// ----- Reusable Section Wrapper -----
-function Section({ id, title, kicker, children }) {
-  return (
-    <section id={id} className="relative mx-auto max-w-6xl px-4 py-20">
-      <div className="mb-8">
-        {kicker && <p className="text-xs uppercase tracking-[0.2em] text-neutral-500 dark:text-neutral-400">{kicker}</p>}
-        <h2 className="mt-2 text-3xl font-semibold tracking-tight text-black dark:text-white">{title}</h2>
-      </div>
-      {children}
-    </section>
-  );
-}
+// Player controls
+playBtn.addEventListener('click', () => {
+  if (audio.paused) {
+    if (currentTrackIndex === -1 && playlist.length > 0) {
+      currentTrackIndex = 0;
+      playTrack(currentTrackIndex);
+    } else {
+      audio.play()
+        .then(() => {
+          playBtn.textContent = '⏸';
+        })
+        .catch(err => {
+          console.error("Play error:", err);
+        });
+    }
+  } else {
+    audio.pause();
+    playBtn.textContent = '▶️';
+  }
+});
 
-function Hero() {
-  return (
-    <header id="home" className="relative mx-auto flex max-w-6xl flex-col items-center gap-8 px-4 pb-24 pt-28 text-center">
-      <SoftBackground />
-      <motion.h1 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-5xl font-semibold tracking-tight text-black dark:text-white">
-        Subhajit Sarkar
-      </motion.h1>
-      <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1 }} className="max-w-2xl text-balance text-lg leading-relaxed text-neutral-700 dark:text-neutral-300">
-        Building calm, precise, human interfaces. Frontend engineer & creative coder exploring React, Tailwind, and generative visuals.
-      </motion.p>
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.2 }} className="flex flex-wrap items-center justify-center gap-3">
-        <Button asChild size="sm" className="rounded-2xl">
-          <a href="#work">View Work</a>
-        </Button>
-        <Button variant="secondary" size="sm" asChild className="rounded-2xl">
-          <a href="#contact"><Mail className="mr-2 h-4 w-4"/>Contact</a>
-        </Button>
-        <Button variant="ghost" size="sm" asChild className="rounded-2xl">
-          <a href="/resume.pdf" download><Download className="mr-2 h-4 w-4"/>Résumé</a>
-        </Button>
-      </motion.div>
-      <div className="mt-8 grid w-full grid-cols-2 gap-3 sm:grid-cols-4">
-        {["React", "Tailwind", "Two.js", "Framer Motion"].map((t) => (
-          <div key={t} className="rounded-2xl border border-neutral-200/70 px-3 py-2 text-center text-xs text-neutral-600 shadow-sm dark:border-neutral-800 dark:text-neutral-300">
-            {t}
-          </div>
-        ))}
-      </div>
-    </header>
-  );
-}
+prevBtn.addEventListener('click', () => {
+  if (playlist.length === 0) return;
+  currentTrackIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length;
+  playTrack(currentTrackIndex);
+});
 
-function ProjectCard({ title, description, tags = [], href, repo }) {
-  return (
-    <Card className="rounded-3xl border-neutral-200 shadow-sm dark:border-neutral-800">
-      <CardHeader>
-        <CardTitle className="flex items-center justify-between">
-          <span>{title}</span>
-          <div className="flex items-center gap-2">
-            {href && (
-              <a href={href} aria-label="Live" className="text-neutral-500 hover:text-black dark:text-neutral-400 dark:hover:text-white">
-                <LinkIcon className="h-4 w-4" />
-              </a>
-            )}
-            {repo && (
-              <a href={repo} aria-label="GitHub" className="text-neutral-500 hover:text-black dark:text-neutral-400 dark:hover:text-white">
-                <Github className="h-4 w-4" />
-              </a>
-            )}
-          </div>
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <p className="text-sm text-neutral-700 dark:text-neutral-300">{description}</p>
-        <div className="mt-4 flex flex-wrap gap-2">
-          {tags.map((t) => (
-            <span key={t} className="rounded-full border border-neutral-200 px-2 py-1 text-[10px] uppercase tracking-wider text-neutral-600 dark:border-neutral-800 dark:text-neutral-300">
-              {t}
-            </span>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
+nextBtn.addEventListener('click', () => {
+  if (playlist.length === 0) return;
+  currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+  playTrack(currentTrackIndex);
+});
 
-function Work() {
-  const projects = [
-    {
-      title: "Hand‑drawn Portfolio",
-      description: "Interactive sketch aesthetic with physics‑based doodles and smooth page transitions.",
-      tags: ["React", "Tailwind", "Framer"],
-      href: "#",
-      repo: "#",
-    },
-    {
-      title: "Generative Grid",
-      description: "Two.js lattice animation rendered on the GPU‑friendly canvas for ultra‑low CPU impact.",
-      tags: ["Two.js", "Canvas", "Perf"],
-      href: "#",
-      repo: "#",
-    },
-    {
-      title: "Kawaii Hyperpop Branding",
-      description: "Toxic Kawaii identity system with auto‑layout templates for social and merch.",
-      tags: ["Design", "Figma", "Brand"],
-      href: "#",
-      repo: "#",
-    },
-  ];
-  return (
-    <Section id="work" title="Selected Work" kicker="Portfolio">
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        {projects.map((p) => (
-          <ProjectCard key={p.title} {...p} />
-        ))}
-      </div>
-    </Section>
-  );
-}
+// When track ends
+audio.addEventListener('ended', () => {
+  nextBtn.click();
+});
 
-function About() {
-  return (
-    <Section id="about" title="About" kicker="Profile">
-      <div className="grid grid-cols-1 items-start gap-8 md:grid-cols-5">
-        <div className="md:col-span-3">
-          <p className="text-neutral-700 dark:text-neutral-300">
-            I design and build minimal, resilient frontends. I like systems that fade away and let the work speak.
-            I’m currently exploring generative motion, typographic rhythm, and tactile interactions.
-          </p>
-          <p className="mt-4 text-neutral-700 dark:text-neutral-300">
-            Tooling I enjoy: React, Tailwind, Framer Motion, Two.js, and a calm coding environment.
-          </p>
-        </div>
-        <ul className="md:col-span-2 space-y-2 text-sm text-neutral-700 dark:text-neutral-300">
-          <li><span className="font-medium">Location:</span> India (IST)</li>
-          <li><span className="font-medium">Email:</span> you@example.com</li>
-          <li><span className="font-medium">Status:</span> Open to opportunities</li>
-        </ul>
-      </div>
-    </Section>
-  );
-}
+// Error handling
+audio.addEventListener('error', (e) => {
+  console.error("Audio error:", e);
+  nowPlayingEl.textContent = "Error playing track";
+});
 
-function Contact() {
-  return (
-    <Section id="contact" title="Contact" kicker="Say hello">
-      <form className="mx-auto max-w-xl space-y-4">
-        <Input placeholder="Your name" required className="rounded-2xl" />
-        <Input type="email" placeholder="Email address" required className="rounded-2xl" />
-        <Textarea placeholder="Message" rows={5} required className="rounded-2xl" />
-        <div className="flex items-center justify-between">
-          <p className="text-xs text-neutral-500">I reply within 24–48 hours.</p>
-          <Button type="submit" className="rounded-2xl">Send</Button>
-        </div>
-      </form>
-    </Section>
-  );
-}
+// Close player when clicking outside
+document.addEventListener('click', (e) => {
+  if (!musicPlayer.contains(e.target) && e.target !== musicIcon) {
+    musicPlayer.style.display = 'none';
+  }
+});
 
-export default function Portfolio() {
-  const [theme, setTheme] = useState("light");
-  useEffect(() => {
-    const root = document.documentElement;
-    root.classList.remove(theme === "light" ? "dark" : "light");
-    root.classList.add(theme);
-  }, [theme]);
-  const toggleTheme = () => setTheme((t) => (t === "light" ? "dark" : "light"));
-
-  return (
-    <div className={`${theme} min-h-screen bg-white text-neutral-900 transition-colors duration-300 dark:bg-neutral-950 dark:text-neutral-50`}>
-      <a href="#content" className="sr-only focus:not-sr-only">Skip to content</a>
-      <Nav theme={theme} toggleTheme={toggleTheme} />
-      <main id="content">
-        <Hero />
-        <Work />
-        <About />
-        <Contact />
-      </main>
-      <footer className="border-t border-neutral-200 py-10 text-center text-sm text-neutral-500 dark:border-neutral-800">
-        <div className="mx-auto max-w-6xl px-4">
-          <p>© {new Date().getFullYear()} Subhajit Sarkar. Built with React · Tailwind · Two.js.</p>
-        </div>
-      </footer>
-    </div>
-  );
-}
-
-// --- Notes ---------------------------------------------------------
-// • This is a single‑file React component ready to drop into a Vite/Next app.
-// • Tailwind required: ensure your project is configured; classes are inline.
-// • shadcn/ui + lucide-react + framer-motion + two.js should be installed.
-// • Replace placeholders (email, links, résumé) to personalize.
-// • Apple‑ish feel via whitespace, soft motion, and careful typography.
+// Start player when page loads
+document.addEventListener('DOMContentLoaded', initMusicPlayer);
+</script>
+</body>
+</html>
