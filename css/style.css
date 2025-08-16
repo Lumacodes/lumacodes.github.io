@@ -1,0 +1,154 @@
+:root {
+  --glass-1: rgba(255, 255, 255, 0.65);
+  --glass-2: rgba(255, 255, 255, 0.5);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+/* Title sizing */
+.fluid-title {
+  font-size: clamp(2rem, 4vw + 0.5rem, 4.6rem);
+  line-height: 1;
+}
+
+.fluid-sub {
+  font-size: clamp(1rem, 1.1vw + 0.8rem, 1.2rem);
+}
+
+/* Reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+.revealed {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+/* Bento grid */
+.bento {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1rem;
+}
+
+.bento-item {
+  border-radius: 1rem;
+  padding: 1.1rem;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.02));
+  backdrop-filter: blur(8px) saturate(120%);
+  box-shadow: 0 6px 24px rgba(10, 10, 10, 0.06);
+}
+
+@media (prefers-color-scheme: dark) {
+  .bento-item {
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+    box-shadow: 0 6px 30px rgba(2, 2, 2, 0.6);
+  }
+}
+
+.span-4 {
+  grid-column: span 4;
+}
+
+.span-6 {
+  grid-column: span 6;
+}
+
+.span-8 {
+  grid-column: span 8;
+}
+
+.row-2 {
+  grid-row: span 2;
+}
+
+@media (max-width: 1024px) {
+  .span-8 {
+    grid-column: span 12;
+  }
+
+  .span-6 {
+    grid-column: span 12;
+  }
+
+  .span-4 {
+    grid-column: span 6;
+  }
+}
+
+@media (max-width: 640px) {
+  .span-4,
+  .span-6,
+  .span-8 {
+    grid-column: span 12;
+  }
+}
+
+/* Progress bar */
+#progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  transform-origin: left;
+  transform: scaleX(0);
+  z-index: 60;
+  pointer-events: none;
+  background: linear-gradient(90deg, #111, #666);
+}
+
+.dark #progress {
+  background: linear-gradient(90deg, #fff, #bbb);
+}
+
+/* Small helpers */
+a.link {
+  position: relative;
+  color: inherit;
+}
+
+a.link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  height: 1px;
+  width: 100%;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease;
+}
+
+a.link:hover::after {
+  transform: scaleX(1);
+}
+
+/* Canvas wrapper */
+.canvas-wrap {
+  width: 100%;
+  height: 100%;
+  min-height: 260px;
+  display: block;
+}
+
+/* Small responsive nav fix */
+@media (max-width: 640px) {
+  nav .nav-center {
+    display: none;
+  }
+}
