@@ -1,749 +1,194 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>LumaCodes → Subhajit</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Lumacodes · Subhajit — Minimal Bento Portfolio</title>
+  <meta name="description"
+    content="Apple-inspired, no-build portfolio — bento projects from GitHub, smooth minimal animations, interactive 3D object, light/dark toggle.">
+  <meta name="color-scheme" content="light dark">
 
-<!-- Hand-drawn fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Gloria+Hallelujah&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Tailwind (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial'] },
+        }
+      }
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-<style>
-  :root{
-    --paper:#fffaf2;
-    --ink:#222;
-    --crayon:#f5586a;
-    --blue:#8fd3ff;
-    --yellow:#fff2a6;
-    --mint:#d6ffde;
-    --lav:#ead9ff;
-    --shadow:rgba(0,0,0,.08);
-    --glass:rgba(255,255,255,0.6);
-    --accent:#8fd3ff;
-  }
+  <!-- GSAP for scroll/animations -->
+  <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+  <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
 
-  /* ===== Global / paper texture ===== */
-  html,body{height:100%}
-  body{
-    margin:0;
-    background:
-      radial-gradient(1200px 800px at 20% 10%, #fffef8, transparent 60%),
-      radial-gradient(1000px 700px at 80% 90%, #fff6ee, transparent 55%),
-      url("data:image/svg+xml;utf8,\
-<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'>\
-  <filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='1'/>\
-  <feColorMatrix type='saturate' values='0.25'/>\
-  <feComponentTransfer><feFuncA type='table' tableValues='0 0 .05 .12 .18 .05 0'/></feComponentTransfer></filter>\
-  <rect width='120' height='120' filter='url(%23n)' fill='%23f5586a' fill-opacity='0.18'/>\
-</svg>");
-    background-color:var(--paper);
-    background-blend-mode:multiply,normal,normal;
-    color:var(--ink);
-    font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
-    scroll-behavior:smooth;
-    cursor: url('data:image/svg+xml;utf8,\
-<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"36\" height=\"36\" viewBox=\"0 0 36 36\">\
-<g transform=\"rotate(-20 18 18)\">\
-<path d=\"M6 4 L26 18 L6 28 Z\" fill=\"#222\" stroke=\"#222\" stroke-width=\"1\"/>\
-<rect x=\"25\" y=\"16\" width=\"6\" height=\"4\" rx=\"1\" fill=\"#f5586a\" stroke=\"#222\"/>\
-</g></svg>') 4 2, auto;
-  }
-
-  /* ===== Music Player Styles ===== */
-  #music-icon {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    font-size: 24px;
-    cursor: pointer;
-    z-index: 1000;
-    background: var(--yellow);
-    border: 2px solid var(--ink);
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 3px 3px 0 var(--shadow);
-    transition: all 0.2s ease;
-  }
-
-  #music-icon:hover {
-    transform: scale(1.1) rotate(5deg);
-  }
-
-  #music-player {
-    position: fixed;
-    top: 70px;
-    right: 20px;
-    width: 300px;
-    background: var(--paper);
-    border: 3px solid var(--ink);
-    border-radius: 16px;
-    padding: 15px;
-    box-shadow: 8px 8px 0 var(--shadow);
-    display: none;
-    z-index: 1000;
-  }
-
-  #music-player h3 {
-    font-family: 'Permanent Marker', cursive;
-    margin-top: 0;
-    border-bottom: 2px dashed var(--ink);
-    padding-bottom: 8px;
-  }
-
-  #playlist {
-    max-height: 200px;
-    overflow-y: auto;
-    margin-bottom: 15px;
-    border: 2px dashed var(--ink);
-    border-radius: 12px;
-    padding: 5px;
-    background: rgba(255,255,255,0.6);
-  }
-
-  .song-item {
-    padding: 8px;
-    cursor: pointer;
-    border-bottom: 1px solid var(--shadow);
-    font-family: 'Gloria Hallelujah', cursive;
-    transition: all 0.2s ease;
-    border-radius: 8px;
-  }
-
-  .song-item:hover {
-    background: var(--lav);
-    transform: translateX(5px);
-  }
-
-  .song-item.playing {
-    background: var(--blue);
-    font-weight: bold;
-  }
-
-  .controls {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 15px;
-  }
-
-  .controls button {
-    flex: 1;
-    background: var(--yellow);
-    border: 2px solid var(--ink);
-    border-radius: 12px;
-    padding: 8px;
-    cursor: pointer;
-    font-size: 16px;
-    box-shadow: 3px 3px 0 var(--shadow);
-    transition: all 0.2s ease;
-  }
-
-  .controls button:hover {
-    transform: translateY(-2px);
-    box-shadow: 5px 5px 0 var(--shadow);
-  }
-
-  #now-playing {
-    font-family: 'Permanent Marker', cursive;
-    color: var(--crayon);
-  }
-
-  /* Rest of your existing styles... */
-  .section{
-    min-height:100svh;
-    display:grid;
-    place-items:center;
-    padding: clamp(24px, 3vw, 56px);
-    position:relative;
-    overflow:hidden;
-  }
-
-  .card{
-    width:min(1150px, 92vw);
-    background:#fffefa;
-    border:3px solid #222;
-    border-radius:24px;
-    box-shadow: 8px 8px 0 var(--shadow), 16px 16px 0 #00000010;
-    padding: clamp(28px, 4vw, 56px);
-    position:relative;
-    isolation:isolate;
-  }
-  .card::before, .card::after{
-    content:"";
-    position:absolute; inset:0;
-    border:3px dashed #222; border-radius:26px;
-    transform: translate(8px,8px) rotate(-.7deg);
-    opacity:.45; pointer-events:none; mix-blend-mode:multiply;
-  }
-  .card::after{
-    transform: translate(-8px,-8px) rotate(.6deg);
-    border-color:#000000aa; opacity:.25;
-  }
-
-  /* ===== HERO typing ===== */
-  .typewrap{
-    display:inline-flex; align-items:flex-end; gap:.25rem;
-    background:#fffdf6; border:2px solid #1d1d1d; border-radius:16px;
-    padding:.5rem 1rem; box-shadow: 4px 4px 0 #00000012;
-  }
-  .type{
-    font: 900 clamp(2.4rem, 7vw, 5rem)/1 "Permanent Marker", cursive;
-    letter-spacing:.5px; white-space:nowrap; overflow:hidden;
-    text-shadow:
-      0.5px 0.5px 0 var(--shadow),
-      -0.5px 0.5px 0 var(--shadow),
-      0 0 1px #00000030;
-  }
-  .cursor{
-    width:1ch; height:1.2em; display:inline-block;
-    border-right: 6px solid var(--crayon);
-    transform: translateY(8px) rotate(-1.5deg);
-    filter: drop-shadow(0 0 1px var(--crayon));
-    animation: blink .65s steps(1) infinite;
-    margin-left:.12rem;
-  }
-  @keyframes blink { 50%{opacity:0;} }
-
-  .hint{
-    margin-top:18px;
-    font: 700 clamp(1rem, 2.2vw, 1.25rem) "Gloria Hallelujah", cursive;
-    transform:rotate(-1deg);
-  }
-
-  /* down arrows */
-  .down-arrows{
-    position:absolute; left:50%; bottom:22px; translate:-50% 0;
-    display:flex; gap:18px; pointer-events:none;
-  }
-  .wiggle{ animation: wiggle 2.2s ease-in-out infinite; }
-  .wiggle:nth-child(2){ animation-delay:.25s; }
-  .wiggle:nth-child(3){ animation-delay:.5s; }
-  @keyframes wiggle{
-    0%,100%{ transform: translateY(0) rotate(-2deg); }
-    50%{ transform: translateY(8px) rotate(2deg); }
-  }
-
-  /* ===== Section entrance animations (left/right) ===== */
-  .slide-in{ opacity:0; transform: translateX(var(--x,60px)); transition: transform 900ms cubic-bezier(.2,.7,0,1), opacity 900ms ease; }
-  .slide-in.active{ opacity:1; transform: translateX(0); }
-
-  /* ===== BENTO grid ===== */
-  .bento{
-    display:grid;
-    grid-template-columns: repeat(12, 1fr);
-    gap: clamp(12px, 2vw, 18px);
-    margin-top: 10px;
-  }
-  .tile{
-    grid-column: span 4;
-    background:#fff;
-    border:3px solid #222; border-radius:18px;
-    box-shadow: 6px 6px 0 #00000018;
-    padding:18px;
-    position:relative;
-    transform: rotate(var(--r,-1.2deg));
-    transition: transform .2s ease;
-    cursor:pointer;
-  }
-  .tile:hover{ transform: rotate(.8deg) translateY(-2px); }
-  .tile .title{
-    font: 800 1.35rem/1.1 "Permanent Marker", cursive;
-    margin:0 0 6px;
-  }
-  .tile .desc{
-    font: 1rem/1.6 "Gloria Hallelujah", cursive;
-  }
-  .tile.yellow{ background:var(--yellow); }
-  .tile.blue{ background:var(--blue); }
-  .tile.mint{ background:var(--mint); }
-  .tile.lav{ background:var(--lav); }
-  .tile::before{
-    content:""; position:absolute; width:42px; height:18px; top:-10px; left:18px;
-    background: linear-gradient(#ffe, #ffc);
-    border:2px solid #222; border-radius:6px;
-    transform: rotate(-4deg);
-    box-shadow: 2px 2px 0 #00000020;
-  }
-
-  /* ===== Popover (tile details) ===== */
-  .popover{
-    position:fixed; inset:0; background:rgba(0,0,0,.4);
-    display:none; align-items:center; justify-content:center; z-index:50;
-    padding:20px;
-  }
-  .popover.open{ display:flex; }
-  .popcard{
-    max-width:760px; width:min(92vw,760px);
-    background:#fffefa; border:3px solid #222; border-radius:18px;
-    box-shadow: 10px 10px 0 #00000030; padding:22px;
-  }
-  .popcard h3{ font:800 1.6rem "Permanent Marker", cursive; margin:0 0 10px; }
-  .popcard p{ font:1.02rem/1.7 "Gloria Hallelujah", cursive; margin:0; }
-  .closebtn{
-    position:absolute; right:18px; top:12px;
-    font:800 1.2rem "Permanent Marker", cursive; background:#fff; border:3px solid #222; border-radius:10px; padding:.25rem .55rem; cursor:pointer;
-    box-shadow: 4px 4px 0 #00000022;
-  }
-
-  /* ===== About content ===== */
-  .about-text{ max-width:70ch; margin:0 auto 14px; font: 1.06rem/1.75 "Gloria Hallelujah", cursive; }
-  .actions{ margin-top:18px; display:flex; gap:12px; flex-wrap:wrap; justify-content:center; }
-  .btn{
-    --bg:#fff; background:var(--bg);
-    border:3px solid #222; border-radius:14px;
-    padding:.65rem 1rem; font: 700 1rem "Gloria Hallelujah", cursive;
-    color:#111; text-decoration:none; transform: rotate(-1.2deg);
-    box-shadow: 4px 4px 0 #0000001a;
-  }
-  .btn:hover{ transform: rotate(.6deg) translateY(-2px); }
-  .btn.pink{ --bg:#ffe3ea; } .btn.blue{ --bg:#e0f1ff; } .btn.yellow{ --bg:#fff7c6; }
-
-  /* ===== Responsive ===== */
-  @media (max-width: 1100px){ .tile{ grid-column: span 6; } }
-  @media (max-width: 700px){ 
-    .tile{ grid-column: span 12; } 
-    #music-player {
-      width: 250px;
-      right: 10px;
-    }
-  }
-</style>
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
 
-<!-- Music Player Icon -->
-<div id="music-icon">🎵</div>
+<body class="bg-white text-neutral-900 dark:bg-neutral-950 dark:text-neutral-50">
+  <div id="progress"></div>
+  <a href="#main" class="sr-only focus:not-sr-only">Skip to content</a>
 
-<!-- Music Player -->
-<div id="music-player">
-  <h3>Luma Player</h3>
-  <div id="playlist"></div>
-  <div class="controls">
-    <button id="prev-btn">⏮</button>
-    <button id="play-btn">▶️</button>
-    <button id="next-btn">⏭</button>
-  </div>
-  <div>Now Playing: <span id="now-playing">None</span></div>
-</div>
-
-<!-- ========== HERO ========== -->
-<section id="hero" class="section">
-  <div class="card" aria-live="polite" style="text-align:center">
-    <div class="typewrap" aria-label="animated heading">
-      <span id="type" class="type"></span>
-      <span class="cursor" aria-hidden="true"></span>
-    </div>
-    <div class="hint">scroll ↓ for the ride</div>
-  </div>
-
-  <div class="down-arrows">
-    <svg class="wiggle" width="52" height="52" viewBox="0 0 52 52" fill="none" aria-hidden="true">
-      <path d="M8 12 L26 40 L44 12" stroke="#f5586a" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-    <svg class="wiggle" width="52" height="52" viewBox="0 0 52 52" fill="none" aria-hidden="true">
-      <path d="M8 12 L26 40 L44 12" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-    <svg class="wiggle" width="52" height="52" viewBox="0 0 52 52" fill="none" aria-hidden="true">
-      <path d="M8 12 L26 40 L44 12" stroke="#8fd3ff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-  </div>
-</section>
-
-<!-- ========== ABOUT (slides in from RIGHT first time) ========== -->
-<section id="about" class="section">
-  <div class="card slide-in" style="--x:80px">
-    <h2 style="text-align:center; font: 900 clamp(1.6rem, 3vw, 2.2rem) 'Permanent Marker', cursive; margin:0 0 10px;">
-      About — Subhajit (aka Luma)
-    </h2>
-
-    <p class="about-text">
-      Self-taught developer & creative technologist. I build clean, reliable tools and produce music.  
-      Specializing in <strong>Python</strong>, <strong>C</strong>, and <strong>Rust (WIP)</strong>. I run <strong>Gentoo</strong> with a custom kernel and contribute to open source.  
-      Also into design, video, audio engineering, and pattern-oriented problem solving. ADHD = creative advantage.  
-      If it grabs me, I go deep: new languages, DAW plugins, or low-level systems.
-    </p>
-
-    <div class="bento">
-      <div class="tile yellow" data-pop="python" style="--r:-1.2deg">
-        <h3 class="title">Python 🐍</h3>
-        <p class="desc">APIs, tools, automation, fast prototypes.</p>
+  <!-- NAV -->
+  <nav
+    class="fixed top-0 inset-x-0 z-50 backdrop-blur-md bg-white/60 dark:bg-neutral-950/50 border-b border-neutral-200/60 dark:border-neutral-800/60">
+    <div class="max-w-6xl mx-auto px-4 py-3 grid grid-cols-3 items-center">
+      <div class="flex items-center gap-3">
+        <span class="text-lg font-semibold tracking-tight"><span class="opacity-60">@</span><span
+            class="ml-1">Lumacodes</span></span>
       </div>
-      <div class="tile blue" data-pop="rust" style="--r:.6deg">
-        <h3 class="title">Rust ⚙️ (WIP)</h3>
-        <p class="desc">Systems, safety, performance, CLI craft.</p>
+      <div class="nav-center flex justify-center gap-8">
+        <a href="#work" class="text-sm hover:opacity-80">Work</a>
+        <a href="#about" class="text-sm hover:opacity-80">About</a>
+        <a href="#blog" class="text-sm hover:opacity-80">Blog</a>
+        <a href="#contact" class="text-sm hover:opacity-80">Contact</a>
       </div>
-      <div class="tile mint" data-pop="music" style="--r:-.4deg">
-        <h3 class="title">Music 🎵</h3>
-        <p class="desc">Production, mixing, sound design.</p>
-      </div>
-      <div class="tile lav" data-pop="gentoo" style="--r:1.2deg">
-        <h3 class="title">Gentoo 🐧</h3>
-        <p class="desc">Custom kernel, low-level tooling, dotfiles.</p>
-      </div>
-      <div class="tile yellow" data-pop="design" style="--r:-.8deg">
-        <h3 class="title">Design/Video 🎨</h3>
-        <p class="desc">Storyboards, edits, hand-drawn UI.</p>
-      </div>
-      <div class="tile blue" data-pop="trading" style="--r:.2deg">
-        <h3 class="title">Markets 📈</h3>
-        <p class="desc">Pattern thinking & risk systems.</p>
+      <div class="flex justify-end items-center gap-3">
+        <button id="theme-toggle"
+          class="text-sm px-3 py-1.5 rounded-xl border border-neutral-200 dark:border-neutral-800">Toggle dark</button>
       </div>
     </div>
+  </nav>
 
-    <div class="actions">
-      <a class="btn pink" href="https://github.com/Lumacodes" target="_blank" rel="noopener">GitHub</a>
-      <a class="btn blue" href="https://linkedin.com/in/lumacodes" target="_blank" rel="noopener">LinkedIn</a>
-      <a class="btn yellow" href="#hero">Back to top</a>
+  <!-- HERO -->
+  <header class="relative overflow-hidden min-h-[86vh] flex items-center">
+    <div
+      class="absolute inset-0 -z-20 bg-gradient-to-b from-white to-neutral-50 dark:from-neutral-950 dark:to-neutral-900">
     </div>
-  </div>
-</section>
-
-<!-- ========== PROJECTS (slides in from LEFT) ========== -->
-<section id="projects" class="section">
-  <div class="card slide-in" style="--x:-80px">
-    <h2 style="text-align:center; font: 900 clamp(1.6rem, 3vw, 2.2rem) 'Permanent Marker', cursive; margin:0 0 10px;">
-      Little Experiments
-    </h2>
-    <p class="about-text" style="text-align:center">
-      A rotating sketchbook of code + sound. (Hook this to your GitHub later.)
-    </p>
-
-    <div class="bento">
-      <div class="tile mint" style="--r:.8deg">
-        <h3 class="title">Doodle UI Kit ✏️</h3>
-        <p class="desc">CSS-only sketch borders, sticky notes, arrows.</p>
+    <div class="max-w-6xl mx-auto px-4 pt-28 pb-16 w-full grid md:grid-cols-5 gap-8 items-center">
+      <div class="md:col-span-3">
+        <h1 class="fluid-title font-semibold tracking-tight leading-tight reveal">
+          <span id="typewriter" aria-label="Lumacodes! | Subhajit^_^"></span>
+        </h1>
+        <p class="fluid-sub mt-4 max-w-2xl text-neutral-700 dark:text-neutral-300 reveal">Hello — I'm Subhajit, a.k.a.
+          <span class="font-medium">Lumacodes</span>. I design calm, precise, human interfaces with modern web tech and
+          a minimalist, Apple-inspired philosophy.</p>
+        <div class="mt-8 flex flex-wrap gap-3 reveal">
+          <a href="#work"
+            class="px-5 py-2.5 rounded-2xl bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 hover:opacity-90">View
+            Work</a>
+          <a href="#contact"
+            class="px-5 py-2.5 rounded-2xl border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-900">Contact</a>
+        </div>
       </div>
-      <div class="tile lav" style="--r:-.6deg">
-        <h3 class="title">Audio Sandbox 🔊</h3>
-        <p class="desc">WebAudio synth, tiny sampler, FX chain.</p>
-      </div>
-      <div class="tile yellow" style="--r:1deg">
-        <h3 class="title">CLI Toys ⌨️</h3>
-        <p class="desc">Rust + Python tools for everyday dev pain.</p>
+
+      <!-- Canvas (3D) -->
+      <div class="md:col-span-2 h-[42vh] md:h-[52vh] relative reveal">
+        <div class="canvas-wrap">
+          <canvas id="hero-canvas" class="w-full h-full block"></canvas>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </header>
 
-<!-- ========== CONTACT (slides UP) ========== -->
-<section id="contact" class="section">
-  <div class="card slide-in" style="--x:0; transform: translateY(60px);">
-    <h2 style="text-align:center; font: 900 clamp(1.6rem, 3vw, 2.2rem) 'Permanent Marker', cursive; margin:0 0 10px;">
-      Say Hi
-    </h2>
-    <p class="about-text" style="text-align:center">
-      📨 <strong>Subhajitdas@tuta.io</strong> — open to collabs, OSS, and playful UI experiments.
-    </p>
-    <div class="actions">
-      <a class="btn pink" href="#about">About</a>
-      <a class="btn blue" href="#projects">Projects</a>
-      <a class="btn yellow" href="#hero">Top</a>
+  <main id="main">
+    <!-- WORK / BENTO -->
+    <section id="work" class="relative py-20">
+      <div class="max-w-6xl mx-auto px-4">
+        <div class="mb-8 reveal">
+          <p class="text-[11px] uppercase tracking-[0.18em] text-neutral-500 dark:text-neutral-400">Selected work</p>
+          <h2 class="text-3xl font-semibold tracking-tight mt-2">Projects</h2>
+          <p class="mt-2 text-neutral-600 dark:text-neutral-400">Auto-populated from <a class="link"
+              href="https://github.com/Lumacodes" target="_blank" rel="noreferrer">@Lumacodes</a> <i></i> </p>
+        </div>
+        <div id="grid" class="bento auto-rows-[minmax(120px,auto)]"></div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="py-20 border-t border-neutral-200/70 dark:border-neutral-800/70">
+      <div class="max-w-6xl mx-auto px-4 grid md:grid-cols-5 gap-10 items-start">
+        <div class="md:col-span-3 reveal">
+          <h3 class="text-2xl font-semibold tracking-tight mb-3">About</h3>
+          <p class="text-neutral-700 dark:text-neutral-300">I focus on resilient front-ends with great typography and
+            motion. Favorite tools: vanilla JS, Tailwind, GSAP, and generative graphics (Three.js, Two.js). I care about
+            accessibility and performance.</p>
+        </div>
+        <ul class="md:col-span-2 space-y-2 text-sm text-neutral-700 dark:text-neutral-300 reveal">
+          <li><span class="font-medium">Location:</span> India (IST)</li>
+          <li><span class="font-medium">Email:</span> <a class="link" href="mailto:you@example.com">Lumacodes@proton.me</a>
+          </li>
+          <li><span class="font-medium">GitHub:</span> <a class="link"
+              href="https://github.com/Lumacodes">@Lumacodes</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- BLOG PLACEHOLDER -->
+    <section id="blog" class="py-20">
+      <div class="max-w-6xl mx-auto px-4 reveal">
+        <h3 class="text-2xl font-semibold tracking-tight">Blog</h3>
+        <p class="mt-2 text-neutral-600 dark:text-neutral-400">Work in progress <code>#</code> (WIP).</p>
+        <a class="mt-4 inline-block px-5 py-2.5 rounded-2xl border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-900"
+          href="#" target="_blank" rel="noreferrer">Open Blog</a>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="py-20">
+      <div class="max-w-6xl mx-auto px-4 reveal">
+        <h3 class="text-2xl font-semibold tracking-tight">Say hello</h3>
+        <p class="mt-2 text-neutral-600 dark:text-neutral-400">Open for collaborations and interesting problems.</p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a href="mailto:you@example.com"
+            class="px-5 py-2.5 rounded-2xl bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 hover:opacity-90">Email</a>
+          <a href="#work"
+            class="px-5 py-2.5 rounded-2xl border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-900">View
+            projects</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-neutral-200/70 dark:border-neutral-800/70 py-10">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-6">
+      <p class="text-sm text-neutral-500">© <span id="year"></span> Subhajit — Lumacodes.</p>
+      <div class="flex items-center gap-4">
+        <a class="opacity-80 hover:opacity-100" href="https://github.com/Lumacodes" aria-label="GitHub" target="_blank"
+          rel="noreferrer">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path
+              d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.3-1.8-1.3-1.8-1.1-.8.1-.8.1-.8 1.2.1 1.9 1.3 1.9 1.3 1.1 1.9 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.6-.3-5.4-1.3-5.4-6 0-1.3.5-2.4 1.3-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.6 11.6 0 0 1 6 0C17.7 3.2 18.7 3.5 18.7 3.5c.6 1.7.2 2.9.1 3.2.8.9 1.3 1.9 1.3 3.2 0 4.7-2.8 5.7-5.4 6 .4.3.8 1 .8 2v2.6c0 .3.2.6.8.5A12 12 0 0 0 12 .5z" />
+          </svg>
+        </a>
+        <a class="opacity-80 hover:opacity-100" href="#" aria-label="X (Twitter)" target="_blank" rel="noreferrer">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M23 3s-1 4-4 7c2 8-6 11-11 8 0 0 6-6 5-12C9 5 7 3 1 3" />
+          </svg>
+        </a>
+        <a class="opacity-80 hover:opacity-100" href="#" aria-label="LinkedIn" target="_blank" rel="noreferrer">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 8a6 6 0 0 1 6 6v6h-4v-6a2 2 0 0 0-2-2 2 2 0 0 0-2 2v6h-4v-12h4v2" />
+            <rect x="2" y="8" width="4" height="12" rx="1" />
+            <path d="M4 4h.01" />
+          </svg>
+        </a>
+        <a class="opacity-80 hover:opacity-100" href="#" aria-label="Instagram" target="_blank" rel="noreferrer">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"
+            stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="5" />
+            <circle cx="12" cy="12" r="3" />
+            <path d="M17.5 6.5h.01" />
+          </svg>
+        </a>
+      </div>
     </div>
-  </div>
-</section>
+  </footer>
 
-<!-- ===== Popover ===== -->
-<div id="popover" class="popover" role="dialog" aria-modal="true" aria-label="Tile details">
-  <div class="popcard">
-    <button class="closebtn" id="closePop">close</button>
-    <h3 id="popTitle">Title</h3>
-    <p id="popBody">Body</p>
-  </div>
-</div>
-
-<script>
-/* =========================
-   1) TYPE: "LumaCodes!" → backspace → "Subhajit ^_^"
-========================= */
-const typeEl = document.getElementById('type');
-const seq = [
-  { text: 'LumaCodes!', hold: 900, speed: 50 },
-  { deleteTo: 0, hold: 200, speed: 26 },
-  { text: 'Subhajit ^_^', hold: 1600, speed: 42 }
-];
-const sleep = ms => new Promise(r => setTimeout(r, ms));
-async function typeText(t, text, speed=42){
-  for (let i=0; i<text.length; i++){
-    t.textContent += text[i];
-    await sleep(speed + Math.random()*35);
-  }
-}
-async function deleteTo(t, n=0, speed=34){
-  while (t.textContent.length > n){
-    t.textContent = t.textContent.slice(0,-1);
-    await sleep(speed + Math.random()*28);
-  }
-}
-(async function run(){
-  for (const step of seq){
-    if (step.text) await typeText(typeEl, step.text, step.speed);
-    if (step.hold) await sleep(step.hold);
-    if (step.deleteTo !== undefined) await deleteTo(typeEl, step.deleteTo, step.speed);
-  }
-})();
-
-/* =========================
-   2) FIRST SCROLL HIJACK (Apple-like snap to next)
-========================= */
-const hero = document.getElementById('hero');
-const about = document.getElementById('about');
-let hijacked = false;
-
-function goToSection(el){
-  el.scrollIntoView({ behavior:'smooth', block:'start' });
-}
-
-function handleFirstScroll(e){
-  if (hijacked) return;
-  const delta = Math.sign(e.deltaY || e.wheelDelta || -e.detail);
-  if (delta > 0 && window.scrollY < hero.offsetHeight * 0.6){
-    e.preventDefault();
-    hijacked = true;
-    goToSection(about);
-    setTimeout(() => {
-      window.removeEventListener('wheel', handleFirstScroll, { passive:false });
-      window.removeEventListener('keydown', keyHijack);
-    }, 900);
-  }
-}
-function keyHijack(e){
-  if (hijacked) return;
-  if (['ArrowDown','PageDown',' '].includes(e.key) && window.scrollY < hero.offsetHeight * 0.6){
-    e.preventDefault();
-    hijacked = true;
-    goToSection(about);
-    setTimeout(() => {
-      window.removeEventListener('wheel', handleFirstScroll, { passive:false });
-      window.removeEventListener('keydown', keyHijack);
-    }, 900);
-  }
-}
-window.addEventListener('wheel', handleFirstScroll, { passive:false });
-window.addEventListener('keydown', keyHijack);
-
-/* =========================
-   3) SECTION SLIDES (left/right/up) on view
-========================= */
-const sliders = document.querySelectorAll('.slide-in');
-const io = new IntersectionObserver(entries => {
-  entries.forEach(en => {
-    if (en.isIntersecting) {
-      en.target.classList.add('active');
-      en.target.style.transform = en.target.style.transform.includes('translateY')
-        ? 'translateY(0)' : en.target.style.transform;
-    }
-  });
-}, { threshold: 0.25 });
-sliders.forEach(s => io.observe(s));
-
-/* =========================
-   4) BENTO TILE POPOVER
-========================= */
-const pop = document.getElementById('popover');
-const popTitle = document.getElementById('popTitle');
-const popBody = document.getElementById('popBody');
-const closePop = document.getElementById('closePop');
-
-const content = {
-  python: {
-    t: 'Python 🐍',
-    b: 'APIs, data tools, automation. I ship quickly with tests and docs.'
-  },
-  rust: {
-    t: 'Rust ⚙️ (WIP)',
-    b: 'Memory safety + performance. Building CLIs and systems utilities.'
-  },
-  music: {
-    t: 'Music Production 🎵',
-    b: 'DAW workflow, synthesis, mixing. Sound design for web toys.'
-  },
-  gentoo: {
-    t: 'Gentoo Linux 🐧',
-    b: 'Custom kernel, tuned toolchains, dotfiles, reproducible setups.'
-  },
-  design: {
-    t: 'Design / Video 🎨',
-    b: 'Crayon UIs, motion, storyboards, edits. Human, playful, clear.'
-  },
-  trading: {
-    t: 'Markets 📈',
-    b: 'Risk systems, pattern thinking, data viz of signals & edges.'
-  }
-};
-
-document.querySelectorAll('.tile[data-pop]').forEach(tile => {
-  tile.addEventListener('click', () => {
-    const key = tile.dataset.pop;
-    if (!content[key]) return;
-    popTitle.textContent = content[key].t;
-    popBody.textContent = content[key].b;
-    pop.classList.add('open');
-  });
-});
-closePop.addEventListener('click', () => pop.classList.remove('open'));
-pop.addEventListener('click', (e) => { if (e.target === pop) pop.classList.remove('open'); });
-
-/* =========================
-   5) Micro parallax on mouse (cards tilt slightly)
-========================= */
-function tiltOnMove(container){
-  container.addEventListener('mousemove', (e) => {
-    const r = container.getBoundingClientRect();
-    const x = ((e.clientX - r.left)/r.width - 0.5) * 2;
-    const y = ((e.clientY - r.top)/r.height - 0.5) * 2;
-    container.style.transform = `rotateX(${(-y*2)}deg) rotateY(${(x*2)}deg)`;
-  });
-  container.addEventListener('mouseleave', () => {
-    container.style.transform = 'rotateX(0) rotateY(0)';
-  });
-}
-document.querySelectorAll('.card').forEach(tiltOnMove);
-
-/* =========================
-   6) MUSIC PLAYER
-========================= */
-// Elements
-const musicIcon = document.getElementById('music-icon');
-const musicPlayer = document.getElementById('music-player');
-const playlistEl = document.getElementById('playlist');
-const playBtn = document.getElementById('play-btn');
-const prevBtn = document.getElementById('prev-btn');
-const nextBtn = document.getElementById('next-btn');
-const nowPlayingEl = document.getElementById('now-playing');
-
-// Player state
-let audio = new Audio();
-let playlist = [];
-let currentTrackIndex = -1;
-
-// Your music library - replace these with your actual song URLs
-const myMusicLibrary = [
-  {
-    name: "Chill Coding Session",
-    url: "https://example.com/music/chill.mp3" // Replace with your actual URL
-  },
-  {
-    name: "Focus Mode", 
-    url: "https://example.com/music/focus.mp3" // Replace with your actual URL
-  },
-  {
-    name: "Debugging Jazz",
-    url: "https://example.com/music/jazz.mp3" // Replace with your actual URL
-  }
-];
-
-// Initialize player with your songs
-function initMusicPlayer() {
-  playlist = [...myMusicLibrary];
-  renderPlaylist();
-  
-  if (playlist.length > 0) {
-    currentTrackIndex = 0;
-    // Don't autoplay (browsers block this)
-    nowPlayingEl.textContent = "Ready - click play";
-  }
-}
-
-// Toggle player visibility
-musicIcon.addEventListener('click', () => {
-  musicPlayer.style.display = musicPlayer.style.display === 'block' ? 'none' : 'block';
-});
-
-// Render playlist
-function renderPlaylist() {
-  playlistEl.innerHTML = '';
-  playlist.forEach((track, index) => {
-    const item = document.createElement('div');
-    item.className = 'song-item';
-    if (index === currentTrackIndex) {
-      item.classList.add('playing');
-    }
-    item.textContent = track.name;
-    item.addEventListener('click', () => {
-      currentTrackIndex = index;
-      playTrack(currentTrackIndex);
-    });
-    playlistEl.appendChild(item);
-  });
-}
-
-// Play track
-function playTrack(index) {
-  if (index < 0 || index >= playlist.length) return;
-  
-  currentTrackIndex = index;
-  const track = playlist[currentTrackIndex];
-  
-  audio.src = track.url;
-  audio.play()
-    .then(() => {
-      nowPlayingEl.textContent = track.name;
-      playBtn.textContent = '⏸';
-      renderPlaylist();
-    })
-    .catch(err => {
-      console.error("Error playing audio:", err);
-      nowPlayingEl.textContent = "Error playing: " + track.name;
-    });
-}
-
-// Player controls
-playBtn.addEventListener('click', () => {
-  if (audio.paused) {
-    if (currentTrackIndex === -1 && playlist.length > 0) {
-      currentTrackIndex = 0;
-      playTrack(currentTrackIndex);
-    } else {
-      audio.play()
-        .then(() => {
-          playBtn.textContent = '⏸';
-        })
-        .catch(err => {
-          console.error("Play error:", err);
-        });
-    }
-  } else {
-    audio.pause();
-    playBtn.textContent = '▶️';
-  }
-});
-
-prevBtn.addEventListener('click', () => {
-  if (playlist.length === 0) return;
-  currentTrackIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length;
-  playTrack(currentTrackIndex);
-});
-
-nextBtn.addEventListener('click', () => {
-  if (playlist.length === 0) return;
-  currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
-  playTrack(currentTrackIndex);
-});
-
-// When track ends
-audio.addEventListener('ended', () => {
-  nextBtn.click();
-});
-
-// Error handling
-audio.addEventListener('error', (e) => {
-  console.error("Audio error:", e);
-  nowPlayingEl.textContent = "Error playing track";
-});
-
-// Close player when clicking outside
-document.addEventListener('click', (e) => {
-  if (!musicPlayer.contains(e.target) && e.target !== musicIcon) {
-    musicPlayer.style.display = 'none';
-  }
-});
-
-// Start player when page loads
-document.addEventListener('DOMContentLoaded', initMusicPlayer);
-</script>
+  <!-- JavaScript -->
+  <script src="js/main.js" defer></script>
+  <script src="js/threejs.js" type="module" defer></script>
 </body>
+
 </html>
