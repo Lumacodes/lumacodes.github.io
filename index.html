@@ -2,560 +2,575 @@
 <html lang="en">
 
 <head>
-    <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>lumacodes | Portfolio</title>
 
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Lumacodes</title>
-  <meta name="description"
-    content="smooth minimal Project">
-  <meta name="color-scheme" content="light dark">
-
-  <!-- Tailwind (CDN) -->
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial'] },
-        }
-      }
-    };
-  </script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-  <!-- GSAP for scroll/animations -->
-  <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
-  <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
   <style>
-    :root {
-      --glass-1: rgba(255, 255, 255, 0.65);
-      --glass-2: rgba(255, 255, 255, 0.5);
-    }
-
-    html {
-      scroll-behavior: smooth;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
     }
 
     body {
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-      opacity: 0;
-      transition: opacity 0.25s ease;
+      background: linear-gradient(180deg, #0f0f14, #0b0b10);
+      color: #fff;
+      scroll-behavior: smooth;
     }
 
-    /* Title sizing */
-    .fluid-title {
-      font-size: clamp(2rem, 4vw + 0.5rem, 4.6rem);
-      line-height: 1;
+    header {
+      padding: 20px 8%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    .fluid-sub {
-      font-size: clamp(1rem, 1.1vw + 0.8rem, 1.2rem);
+    header h1 {
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: 0.4px;
     }
 
-    /* Reveal */
-    .reveal {
-      opacity: 0;
-      transform: translateY(18px);
+    nav a {
+      margin-left: 20px;
+      color: #ccc;
+      text-decoration: none;
+      transition: 0.3s;
     }
 
-    .revealed {
-      opacity: 1;
-      transform: none;
-      transition: opacity 0.7s ease, transform 0.7s ease;
+    nav a:hover {
+      color: #fff;
     }
 
-    /* Bento grid */
-    .bento {
+    .hero {
+      padding: 100px 8%;
       display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 1rem;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 40px;
     }
 
-    .bento-item {
-      border-radius: 1rem;
-      padding: 1.1rem;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.02));
-      backdrop-filter: blur(8px) saturate(120%);
-      box-shadow: 0 6px 24px rgba(10, 10, 10, 0.06);
+    .hero h2 {
+      font-size: 44px;
+      letter-spacing: -0.5px;
     }
 
-    @media (prefers-color-scheme: dark) {
-      .bento-item {
-        border: 1px solid rgba(255, 255, 255, 0.03);
-        background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
-        box-shadow: 0 6px 30px rgba(2, 2, 2, 0.6);
+    .hero span {
+      color: #8b5cf6;
+    }
+
+    .hero p {
+      margin: 20px 0 26px;
+      color: #aaa;
+      line-height: 1.7;
+      max-width: 480px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 14px 34px;
+      background: linear-gradient(135deg, #8b5cf6, #a78bfa, #7c3aed);
+      background-size: 200% 200%;
+      color: #fff;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 600;
+      animation: btnGradient 6s ease infinite;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      box-shadow: 0 10px 30px rgba(139, 92, 246, 0.35);
+    }
+
+    .btn:hover {
+      transform: translateY(-3px) scale(1.04);
+      box-shadow: 0 18px 45px rgba(139, 92, 246, 0.55);
+    }
+
+    @keyframes btnGradient {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
       }
     }
 
-    .span-4 {
-      grid-column: span 4;
+    .profile {
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 6px solid #8b5cf6;
+      margin: auto;
     }
 
-    .span-6 {
-      grid-column: span 6;
+    .profile img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
-    .span-8 {
-      grid-column: span 8;
+    section {
+      padding: 80px 8%;
     }
 
-    .row-2 {
+    section h3 {
+      font-size: 32px;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    .skills {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      position: relative;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.04));
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      backdrop-filter: blur(18px);
+      padding: 26px;
+      border-radius: 22px;
+      transition: transform .35s ease, box-shadow .35s ease;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 18px 38px rgba(139, 92, 246, 0.25);
+    }
+
+    /* Projects (bento grid) */
+    .projects {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      grid-auto-rows: 160px;
+      gap: 24px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .project-card {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.04));
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      backdrop-filter: blur(18px);
+      padding: 28px;
+      border-radius: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      animation: bentoIn .9s cubic-bezier(.2, .8, .2, 1) both;
+      transition: transform .35s ease, box-shadow .35s ease;
+      overflow: hidden;
+    }
+
+    .project-card:hover {
+      transform: translateY(-6px) scale(1.01);
+      box-shadow: 0 22px 48px rgba(139, 92, 246, 0.25);
+    }
+
+    .project-card:nth-child(1) {
+      grid-column: span 3;
       grid-row: span 2;
     }
 
-    @media (max-width: 1024px) {
-      .span-8 {
-        grid-column: span 12;
+    .project-card:nth-child(2) {
+      grid-column: span 2;
+    }
+
+    .project-card:nth-child(3) {
+      grid-column: span 1;
+    }
+
+    .project-card:nth-child(4) {
+      grid-column: span 2;
+    }
+
+    .project-card:nth-child(5) {
+      grid-column: span 3;
+    }
+
+    @keyframes bentoIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.98);
       }
 
-      .span-6 {
-        grid-column: span 12;
-      }
-
-      .span-4 {
-        grid-column: span 6;
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
       }
     }
 
-    @media (max-width: 640px) {
-      .span-4,
-      .span-6,
-      .span-8 {
-        grid-column: span 12;
+    @media (max-width: 900px) {
+      header {
+        padding: 16px 6%;
       }
-    }
 
-    /* Progress bar */
-    #progress {
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 3px;
-      width: 100%;
-      transform-origin: left;
-      transform: scaleX(0);
-      z-index: 60;
-      pointer-events: none;
-      background: linear-gradient(90deg, #111, #666);
-    }
+      header h1 {
+        font-size: 20px;
+      }
 
-    .dark #progress {
-      background: linear-gradient(90deg, #fff, #bbb);
-    }
+      nav a {
+        margin-left: 14px;
+        font-size: 14px;
+      }
 
-    /* Small helpers */
-    a.link {
-      position: relative;
-      color: inherit;
-    }
+      .hero {
+        padding: 72px 6% 56px;
+        grid-template-columns: 1fr;
+        gap: 28px;
+        text-align: center;
+      }
 
-    a.link::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: -3px;
-      height: 1px;
-      width: 100%;
-      background: currentColor;
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.25s ease;
-    }
+      .hero h2 {
+        font-size: 34px;
+      }
 
-    a.link:hover::after {
-      transform: scaleX(1);
-    }
+      .hero p {
+        margin: 16px auto 22px;
+        font-size: 15px;
+      }
 
-    /* Canvas wrapper */
-    .canvas-wrap {
-      width: 100%;
-      height: 100%;
-      min-height: 260px;
-      display: block;
-    }
+      .btn {
+        padding: 12px 28px;
+        font-size: 14px;
+      }
 
-    /* Small responsive nav fix */
-    @media (max-width: 640px) {
-      nav .nav-center {
+      .hero-strip {
+        max-width: 100%;
+        margin: 18px auto 0;
+      }
+
+      .tech-track {
+        gap: 28px;
+        animation-duration: 36s;
+      }
+
+      .tech-track img {
+        width: 22px;
+        height: 22px;
+      }
+
+      .profile {
+        width: 220px;
+        height: 220px;
+        margin-top: 10px;
+      }
+
+      section {
+        padding: 64px 6%;
+      }
+
+      section h3 {
+        font-size: 26px;
+        margin-bottom: 28px;
+      }
+
+      .skills {
+        gap: 18px;
+      }
+
+      .card {
+        padding: 22px;
+      }
+
+      .projects {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 18px;
+      }
+
+      .project-card {
+        grid-column: span 2 !important;
+        padding: 22px;
+      }
+
+      footer {
+        font-size: 13px;
+      }
+
+      /* disable cursor light on mobile */
+      .cursor-light {
         display: none;
       }
     }
 
-    /* Typewriter styles */
-    #typewriter {
-      font-family: 'Fira Code', 'Courier New', monospace;
-      font-size: 2rem;
-      font-weight: 700;
-      min-height: 2.5rem;
-      display: inline-block;
-      color: #111;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+
+    footer {
+      padding: 30px;
+      text-align: center;
+      color: #777;
     }
 
-    .dark #typewriter {
-      color: #f1f1f1;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    /* scroll progress bar */
+    #scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0%;
+      background: linear-gradient(90deg, #8b5cf6, #a78bfa, #7c3aed);
+      z-index: 9999;
     }
 
-    .cursor {
-      animation: blink 1s step-end infinite;
-      font-weight: bold;
-      color: #ff6b35;
-      text-shadow: 0 0 5px rgba(255, 107, 53, 0.5);
+    /* tech strip styles */
+    .tech-strip {
+      margin-top: 28px;
+      overflow: hidden;
+      mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+      -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
     }
 
-    .dark .cursor {
-      color: #ffeb3b;
-      text-shadow: 0 0 10px rgba(255, 235, 59, 0.7);
+    .hero-strip {
+      max-width: 520px;
+      position: relative;
+
     }
 
-    @keyframes blink {
-      0%, 50% { opacity: 1; }
-      51%, 100% { opacity: 0; }
+    .tech-track {
+      display: flex;
+      gap: 40px;
+      width: max-content;
+      /* required for seamless looping */
+      animation: scrollLeft 30s linear infinite;
+    }
+
+    .tech-track img {
+      width: 24px;
+      height: 24px;
+      opacity: 0.35;
+      filter: grayscale(100%);
+      transition: opacity .3s ease, transform .3s ease, filter .3s ease;
+    }
+
+    .tech-track img:hover {
+      opacity: 1;
+      transform: scale(1.2);
+    }
+
+    @keyframes scrollLeft {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-50%);
+      }
+    }
+
+    /* ================= ULTRA PREMIUM EXTRAS ================= */
+
+    /* cursor light */
+    .cursor-light {
+      position: fixed;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      pointer-events: none;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.18), transparent 60%);
+      mix-blend-mode: screen;
+      transform: translate(-50%, -50%);
+      z-index: 0;
+    }
+
+    /* hero load animation */
+    .hero>div {
+      animation: heroIn 1.2s cubic-bezier(.2, .8, .2, 1) both;
+    }
+
+    @keyframes heroIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* project hover reveal */
+    .project-card::after {
+      content: 'View on GitHub →';
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      background: rgba(15, 15, 20, 0.85);
+      opacity: 0;
+      transition: opacity .35s ease;
+    }
+
+    .project-card:hover::after {
+      opacity: 1;
+    }
+
+    /* reduced motion support */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
+      }
     }
   </style>
+
 </head>
 
-<body class="bg-white text-neutral-900 dark:bg-neutral-950 dark:text-neutral-50">
-  <div id="progress"></div>
-  <a href="#main" class="sr-only focus:not-sr-only">Skip to content</a>
+<body>
+  <div class="cursor-light"></div>
 
-  <!-- NAV -->
-  <nav
-    class="fixed top-0 inset-x-0 z-50 backdrop-blur-md bg-white/60 dark:bg-neutral-950/50 border-b border-neutral-200/60 dark:border-neutral-800/60">
-    <div class="max-w-6xl mx-auto px-4 py-3 grid grid-cols-3 items-center">
-      <div class="flex items-center gap-3">
-        <span class="text-lg font-semibold tracking-tight"><span class="opacity-60">@</span><span
-            class="ml-1">Lumacodes</span></span>
-      </div>
-      <div class="nav-center flex justify-center gap-8">
-        <a href="#work" class="text-sm hover:opacity-80">Work</a>
-        <a href="#about" class="text-sm hover:opacity-80">About</a>
-        <a href="https://lumacodes.blogspot.com/" class="text-sm hover:opacity-80">Blog</a>
-        <a href="#contact" class="text-sm hover:opacity-80">Contact</a>
-      </div>
-      <div class="flex justify-end items-center gap-3">
-        <button id="theme-toggle"
-          class="text-sm px-3 py-1.5 rounded-xl border border-neutral-200 dark:border-neutral-800">Toggle dark</button>
-      </div>
-    </div>
-  </nav>
-
-  <!-- HERO -->
-  <header class="relative overflow-hidden min-h-[86vh] flex items-center">
-    <div
-      class="absolute inset-0 -z-20 bg-gradient-to-b from-white to-neutral-50 dark:from-neutral-950 dark:to-neutral-900">
-    </div>
-    <div class="max-w-6xl mx-auto px-4 pt-28 pb-16 w-full grid md:grid-cols-5 gap-8 items-center">
-      <div class="md:col-span-3">
-        <h1 class="fluid-title font-semibold tracking-tight leading-tight reveal">
-          <span id="typewriter" aria-label="Lumacodes! | Subhajit^_^"></span>
-        </h1>
-        <p class="fluid-sub mt-4 max-w-2xl text-neutral-700 dark:text-neutral-300 reveal">Hello — I'm Subhajit, a.k.a.
-          <span class="font-medium">Lumacodes</span>. I design calm, precise, human interfaces with modern web tech and
-          a minimalist, Apple-inspired philosophy.</p>
-        <div class="mt-8 flex flex-wrap gap-3 reveal">
-          <a href="#work"
-            class="px-5 py-2.5 rounded-2xl bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 hover:opacity-90">View
-            Work</a>
-          <a href="#contact"
-            class="px-5 py-2.5 rounded-2xl border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-900">Contact</a>
-        </div>
-      </div>
-
-      <!-- Canvas (3D) -->
-      <div class="md:col-span-2 h-[42vh] md:h-[52vh] relative reveal">
-        <div class="canvas-wrap">
-          <canvas id="hero-canvas" class="w-full h-full block"></canvas>
-        </div>
-      </div>
-    </div>
+  <header>
+    <h1>lumacodes</h1>
+    <nav>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact" class="nav-contact">Contact</a>
+    </nav>
   </header>
 
-  <main id="main">
-    <!-- WORK / BENTO -->
-    <section id="work" class="relative py-20">
-      <div class="max-w-6xl mx-auto px-4">
-        <div class="mb-8 reveal">
-          <p class="text-[11px] uppercase tracking-[0.18em] text-neutral-500 dark:text-neutral-400">Selected work</p>
-          <h2 class="text-3xl font-semibold tracking-tight mt-2">Projects</h2>
-          <p class="mt-2 text-neutral-600 dark:text-neutral-400">Auto-populated from <a class="link"
-              href="https://github.com/Lumacodes" target="_blank" rel="noreferrer">@Lumacodes</a> <i></i> </p>
+  <!-- scroll progress bar -->
+  <div id="scroll-progress"></div>
+
+  <section class="hero">
+    <div>
+      <h2>Hi, I'm <span>Subha</span></h2>
+      <p>B.Tech 1st year student learning systems, Linux, and low-level engineering.</p>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSeutyD6u9wo0NUeKW5QgGn8hpb8v82-Fdj6rRDMmKVPSIFvBQ/viewform?usp=dialog"
+        class="btn">Hire Me</a>
+      <!-- hero tech strip (local, not full-width) -->
+      <div class="tech-strip hero-strip">
+        <div class="tech-track">
+          <img src="https://cdn.simpleicons.org/html5/ffffff" />
+          <img src="https://cdn.simpleicons.org/css3/ffffff" />
+          <img src="https://cdn.simpleicons.org/javascript/ffffff" />
+          <img src="https://cdn.simpleicons.org/python/ffffff" />
+          <img src="https://cdn.simpleicons.org/rust/ffffff" />
+          <img src="https://cdn.simpleicons.org/c/ffffff" />
+          <img src="https://cdn.simpleicons.org/linux/ffffff" />
+          <img src="https://cdn.simpleicons.org/git/ffffff" />
+          <img src="https://cdn.simpleicons.org/github/ffffff" />
+          <img src="https://cdn.simpleicons.org/docker/ffffff" />
+
+          <!-- duplicate -->
+          <img src="https://cdn.simpleicons.org/html5/ffffff" />
+          <img src="https://cdn.simpleicons.org/css3/ffffff" />
+          <img src="https://cdn.simpleicons.org/javascript/ffffff" />
+          <img src="https://cdn.simpleicons.org/python/ffffff" />
+          <img src="https://cdn.simpleicons.org/rust/ffffff" />
+          <img src="https://cdn.simpleicons.org/c/ffffff" />
+          <img src="https://cdn.simpleicons.org/linux/ffffff" />
+          <img src="https://cdn.simpleicons.org/git/ffffff" />
+          <img src="https://cdn.simpleicons.org/github/ffffff" />
+          <img src="https://cdn.simpleicons.org/docker/ffffff" />
         </div>
-        <div id="grid" class="bento auto-rows-[minmax(120px,auto)]"></div>
-      </div>
-    </section>
-
-    <!-- ABOUT -->
-    <section id="about" class="py-20 border-t border-neutral-200/70 dark:border-neutral-800/70">
-      <div class="max-w-6xl mx-auto px-4 grid md:grid-cols-5 gap-10 items-start">
-        <div class="md:col-span-3 reveal">
-          <h3 class="text-2xl font-semibold tracking-tight mb-3">About</h3>
-          <p class="text-neutral-700 dark:text-neutral-300">I focus on resilient front-ends with great typography and
-            motion. Favorite tools: vanilla JS, Tailwind, GSAP, and generative graphics (Three.js, Two.js). I care about
-            accessibility and performance.</p>
-        </div>
-        <ul class="md:col-span-2 space-y-2 text-sm text-neutral-700 dark:text-neutral-300 reveal">
-          <li><span class="font-medium">Location:</span> India (IST)</li>
-          <li><span class="font-medium">Email:</span> <a class="link" href="mailto:you@example.com">Lumacodes@proton.me</a>
-          </li>
-          <li><span class="font-medium">GitHub:</span> <a class="link"
-              href="https://github.com/Lumacodes">@Lumacodes</a></li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- BLOG PLACEHOLDER -->
-    <section id="blog" class="py-20">
-      <div class="max-w-6xl mx-auto px-4 reveal">
-        <h3 class="text-2xl font-semibold tracking-tight">Blog</h3>
-        <p class="mt-2 text-neutral-600 dark:text-neutral-400">Hola, <code>/</code> </p>
-        <a class="mt-4 inline-block px-5 py-2.5 rounded-2xl border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-900"
-          href="https://lumacodes.blogspot.com/" target="_blank" rel="noreferrer">Open Blog</a>
-      </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section id="contact" class="py-20">
-      <div class="max-w-6xl mx-auto px-4 reveal">
-        <h3 class="text-2xl font-semibold tracking-tight">Say hello</h3>
-        <p class="mt-2 text-neutral-600 dark:text-neutral-400">Open for collaborations and interesting problems.</p>
-        <div class="mt-6 flex flex-wrap gap-3">
-          <a href="mailto:you@example.com"
-            class="px-5 py-2.5 rounded-2xl bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 hover:opacity-90">Email</a>
-          <a href="#work"
-            class="px-5 py-2.5 rounded-2xl border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-900">View
-            projects</a>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="border-t border-neutral-200/70 dark:border-neutral-800/70 py-10">
-    <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-6">
-      <p class="text-sm text-neutral-500">© <span id="year"></span> Subhajit — Lumacodes.</p>
-      <div class="flex items-center gap-4">
-        <a class="opacity-80 hover:opacity-100" href="https://github.com/Lumacodes" aria-label="GitHub" target="_blank"
-          rel="noreferrer">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path
-              d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.3-1.8-1.3-1.8-1.1-.8.1-.8.1-.8 1.2.1 1.9 1.3 1.9 1.3 1.1 1.9 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.6-.3-5.4-1.3-5.4-6 0-1.3.5-2.4 1.3-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.6 11.6 0 0 1 6 0C17.7 3.2 18.7 3.5 18.7 3.5c.6 1.7.2 2.9.1 3.2.8.9 1.3 1.9 1.3 3.2 0 4.7-2.8 5.7-5.4 6 .4.3.8 1 .8 2v2.6c0 .3.2.6.8.5A12 12 0 0 0 12 .5z" />
-          </svg>
-        </a>
-        <a class="opacity-80 hover:opacity-100" href="x.com/lumacodes" aria-label="X (Twitter)" target="_blank" rel="noreferrer">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path d="M23 3s-1 4-4 7c2 8-6 11-11 8 0 0 6-6 5-12C9 5 7 3 1 3" />
-          </svg>
-        </a>
-        <a class="opacity-80 hover:opacity-100" href="https://www.linkedin.com/in/subhajitkumardas/" aria-label="LinkedIn" target="_blank" rel="noreferrer">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path d="M16 8a6 6 0 0 1 6 6v6h-4v-6a2 2 0 0 0-2-2 2 2 0 0 0-2 2v6h-4v-12h4v2" />
-            <rect x="2" y="8" width="4" height="12" rx="1" />
-            <path d="M4 4h.01" />
-          </svg>
-        </a>
-        <a class="opacity-80 hover:opacity-100" href="https://www.instagram.com/luma.codes/" aria-label="Instagram" target="_blank" rel="noreferrer">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"
-            stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="3" width="18" height="18" rx="5" />
-            <circle cx="12" cy="12" r="3" />
-            <path d="M17.5 6.5h.01" />
-          </svg>
-        </a>
       </div>
     </div>
-  </footer>
+    <div class="profile">
+      <img src="Profile_picture" alt="Profile photo" loading="lazy"
+        onerror="this.onerror=null;this.src='';" />
+    </div>
+  </section>
+
+
+
+  <section id="skills">
+    <h3>Skills</h3>
+    <div class="skills">
+      <div class="card">HTML & CSS</div>
+      <div class="card">Linux & Bash</div>
+      <div class="card">Python</div>
+      <div class="card">C Programming</div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <h3>Projects</h3>
+    <p style="text-align:center;color:#8a8a8a;margin:-20px 0 40px;font-size:14px;">Auto-populated from GitHub • Live
+      repositories</p>
+    <div class="projects" id="repo-list"></div>
+  </section>
+
+  <section id="contact">
+    <h3>Contact</h3>
+
+    <div style="text-align:center; margin-bottom:28px;">
+      <a href="https://luma.is-a.dev/me/" target="_blank" rel="noopener" class="btn">Message me directly</a>
+    </div>
+
+    <p style="text-align:center; line-height:1.8">
+      📧 <a href="mailto:lumacodes@proton.me" style="color:#8b5cf6; text-decoration:none;">lumacodes@proton.me</a><br>
+      📧 <a href="mailto:subhajitkumardas@outlook.com"
+        style="color:#8b5cf6; text-decoration:none;">subhajitkumardas@outlook.com</a>
+    </p>
+  </section>
+
+  <footer>© 2025 Subha. Built with ❤️ and caffeine.</footer>
 
   <script>
-    // Immediately show body if JS fails
-    document.body.style.opacity = 1;
+    const username = 'lumacodes';
+    const container = document.getElementById('repo-list');
 
-    // Proper load event listener
-    window.addEventListener('DOMContentLoaded', () => {
-      // Show body with transition
-      document.body.style.opacity = 1;
+    if (!container) {
+      console.error('repo-list container not found');
+    } else {
+      fetch(`https://api.github.com/users/${username}/repos`)
+        .then(res => res.json())
+        .then(repos => {
+          container.innerHTML = '';
+          repos.slice(0, 6).forEach(repo => {
+            const card = document.createElement('div');
+            card.className = 'project-card';
+            card.innerHTML = `
+            <h4 class="project-title">${repo.name}</h4>
+            <p class="project-desc">${repo.description || 'No description provided.'}</p>
+            <small class="project-lang">${repo.language || 'Code'}</small>
+          `;
+            container.appendChild(card);
+          });
+        })
+        .catch(err => console.error('GitHub fetch failed:', err));
+    }
 
-      // Theme toggle
-      const root = document.documentElement;
-      const saved = localStorage.getItem('theme');
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      if (saved === 'dark' || (!saved && prefersDark)) {
-        root.classList.add('dark');
-      }
+    /* cursor light movement */
+    const light = document.querySelector('.cursor-light');
+    document.addEventListener('mousemove', e => {
+      light.style.left = e.clientX + 'px';
+      light.style.top = e.clientY + 'px';
+    });
 
-      const themeBtn = document.getElementById('theme-toggle');
-      function updateThemeBtn() {
-        themeBtn.textContent = root.classList.contains('dark') ? 'Toggle light' : 'Toggle dark';
-      }
-
-      themeBtn.addEventListener('click', () => {
-        root.classList.toggle('dark');
-        localStorage.setItem('theme', root.classList.contains('dark') ? 'dark' : 'light');
-        updateThemeBtn();
+    /* smooth scroll for nav links (fallback) */
+    document.querySelectorAll('nav a[href^="#"]').forEach(link => {
+      link.addEventListener('click', e => {
+        const target = document.querySelector(link.getAttribute('href'));
+        if (!target) return;
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth' });
       });
-      updateThemeBtn();
+    });
 
-      // Progress bar
-      const progress = document.getElementById('progress');
-      let raf = null;
-      function onScroll() {
-        if (raf) cancelAnimationFrame(raf);
-        raf = requestAnimationFrame(() => {
-          const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-          const p = scrollTop / (scrollHeight - clientHeight) || 0;
-          progress.style.transform = `scaleX(${p})`;
-        });
-      }
-      document.addEventListener('scroll', onScroll, { passive: true });
-      onScroll();
-
-      // Reveal animations
-      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (!prefersReduced) {
-        const io = new IntersectionObserver((entries) => {
-          entries.forEach(e => {
-            if (e.isIntersecting) e.target.classList.add('revealed');
-          });
-        }, { threshold: 0.12 });
-        document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-
-        if (window.gsap && window.ScrollTrigger) {
-          gsap.registerPlugin(ScrollTrigger);
-        }
-      } else {
-        document.querySelectorAll('.reveal').forEach(el => el.classList.add('revealed'));
-      }
-
-      // Typewriter with blinking cursor
-      (function () {
-        const words = ['Lumacodes!', 'Subhajit ^_^'];
-        const el = document.getElementById('typewriter');
-        if (!el) return;
-
-        let wordIndex = 0, charIndex = 0, deleting = false;
-        const T = { type: 90, del: 45, hold: 900 };
-        
-        // Add cursor element
-        const cursor = document.createElement('span');
-        cursor.className = 'cursor';
-        cursor.textContent = '|';
-        el.appendChild(cursor);
-
-        function step() {
-          const word = words[wordIndex];
-          if (!deleting) {
-            charIndex++;
-            el.innerHTML = word.slice(0, charIndex) + '<span class="cursor">|</span>';
-            if (charIndex === word.length) {
-              deleting = true;
-              setTimeout(step, T.hold);
-              return;
-            }
-          } else {
-            charIndex--;
-            el.innerHTML = word.slice(0, charIndex) + '<span class="cursor">|</span>';
-            if (charIndex === 0) {
-              deleting = false;
-              wordIndex = (wordIndex + 1) % words.length;
-            }
-          }
-          setTimeout(step, deleting ? T.del : T.type);
-        }
-        step();
-      })();
-
-      // GitHub repos
-      const grid = document.getElementById('grid');
-      if (!grid) return;
-
-      const GH_USER = 'Lumacodes';
-      const LIMIT = 12;
-
-      function bentoClass(i) {
-        if (i % 6 === 0) return 'span-8 row-2';
-        if (i % 6 === 1) return 'span-4';
-        if (i % 6 === 2) return 'span-6';
-        if (i % 6 === 3) return 'span-4';
-        if (i % 6 === 4) return 'span-6';
-        return 'span-4';
-      }
-
-      function esc(s) {
-        return (s || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-      }
-
-      function repoCard(r, i) {
-        const desc = esc(r.description);
-        const lang = r.language ? `<span class="text-xs px-2 py-1 rounded-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800">${esc(r.language)}</span>` : '';
-        const topics = (r.topics || []).slice(0, 3).map(t => `<span class="text-xs px-2 py-1 rounded-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800">${esc(t)}</span>`).join('');
-        return `
-          <article class="bento-item ${bentoClass(i)} reveal hover:shadow-lg transition-transform will-change-transform hover:scale-[1.01]">
-            <div class="flex items-start justify-between gap-3">
-              <h3 class="text-lg font-semibold tracking-tight"><a class="link" href="${r.html_url}" target="_blank" rel="noreferrer">${esc(r.name)}</a></h3>
-              <a class="text-sm link opacity-70" href="${r.html_url}" target="_blank" rel="noreferrer">Open</a>
-            </div>
-            <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-400">${desc}</p>
-            <div class="mt-4 flex flex-wrap gap-2">${lang}${topics}</div>
-          </article>`;
-      }
-
-      async function loadRepos() {
-        try {
-          const res = await fetch(`https://api.github.com/users/${GH_USER}/repos?sort=updated&per_page=100`, {
-            headers: { 'Accept': 'application/vnd.github+json' }
-          });
-          if (!res.ok) throw new Error('GitHub API error');
-
-          const all = await res.json();
-          if (!Array.isArray(all)) throw new Error('GitHub error');
-
-          const repos = all.filter(r => !r.fork && r.description && r.description.trim().length > 0)
-            .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))
-            .slice(0, LIMIT);
-
-          if (!repos.length) {
-            grid.innerHTML = `<div class="bento-item span-12"><p class="text-sm">No described repos yet. Add descriptions on GitHub to feature them automatically.</p></div>`;
-            return;
-          }
-
-          grid.innerHTML = repos.map(repoCard).join('');
-
-          // Attach reveals for newly created nodes
-          if (!prefersReduced) {
-            document.querySelectorAll('#grid .reveal').forEach(el => {
-              const o = new IntersectionObserver(es => {
-                es.forEach(e => {
-                  if (e.isIntersecting) e.target.classList.add('revealed');
-                });
-              }, { threshold: 0.12 });
-              o.observe(el);
-            });
-          } else {
-            document.querySelectorAll('#grid .reveal').forEach(el => el.classList.add('revealed'));
-          }
-        } catch (e) {
-          console.error('Error loading repos:', e);
-          grid.innerHTML = `<div class="bento-item span-12"><p class="text-sm">Couldn't load repos. Visit <a class="link" href="https://github.com/${GH_USER}">@${GH_USER}</a>.</p></div>`;
-        }
-      }
-      loadRepos();
-
-      // Footer year
-      const yearEl = document.getElementById('year');
-      if (yearEl) {
-        yearEl.textContent = new Date().getFullYear();
-      }
+    /* scroll progress bar logic */
+    const progressBar = document.getElementById('scroll-progress');
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (scrollTop / docHeight) * 100;
+      progressBar.style.width = progress + '%';
     });
   </script>
-  <script type="module" src="js/three.js"></script>
 
 </body>
 
