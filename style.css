@@ -1,0 +1,976 @@
+@import url('https://fonts.googleapis.com/css2?family=Bitcount+Single:wght@100..900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Bitcount Single', monospace;
+
+}
+
+nav {
+    position: sticky;
+    top: 12px;              /* 👈 floating glass look */
+    z-index: 1000;
+
+    width: calc(100% - 24px);
+    margin: 12px auto;
+
+    padding: 3px 3px;
+
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.627),
+        rgba(255, 238, 0, 0)
+    );
+
+    backdrop-filter: blur(18px) saturate(180%);
+    -webkit-backdrop-filter: blur(18px) saturate(180%);
+
+    border-radius: 30px;
+    border: 1px solid rgba(255, 252, 252, 0.4);
+
+    box-shadow:
+        0 8px 30px rgba(0, 0, 0, 0.12),
+        inset 0 1px 1px rgba(255, 255, 255, 0.5);
+
+    display: flex;
+    align-items: center;
+}
+
+
+
+nav .menu {
+    /* max-width: auto; */
+    width: 100%;
+    background: azure;
+
+    display: flex;
+    align-items: center;
+    padding: 0 40px;
+
+    border-radius: 25px;
+}
+
+.menu .logo {
+    margin-right: auto;
+    /* pushes menu items right */
+}
+
+.menu .logo a {
+    text-decoration: none;
+    color: #333;
+    font-size: 35px;
+    font-weight: 600;
+}
+
+.menu ul {
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    list-style: none;
+}
+
+.menu ul li {
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+
+    background-color: transparent;
+    transition:
+        background-color 0.4s ease,
+        transform 0.3s ease;
+}
+
+.menu ul li a {
+    text-decoration: none;
+    color: #333;
+    font-size: 18px;
+    font-weight: 500;
+
+    transition: color 0.4s ease;
+}
+
+
+.menu ul li:hover {
+    background-color:#ffbd2e;
+    font-style: italic;
+    transform: translateY(-1px) scale(1.01);
+}
+
+.menu ul li:hover a {
+    color: #000;
+}
+
+body {
+    margin: 0;
+    background: #000;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* VIDEO BACKGROUND */
+.bg-video {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+
+    width: 60vw;
+    max-width: 900px;
+    max-height: 80vh;
+    height: auto;
+
+    object-fit: contain;
+    transform: translate(-50%, -50%);
+
+    opacity: 0;
+    /* start invisible */
+    animation: fadeInVideo 2s ease forwards;
+
+    z-index: 0;
+    pointer-events: none;
+}
+
+@keyframes fadeInVideo {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+.content {
+    position: relative;
+    z-index: 5;
+
+    width: 100%;
+    height: calc(100vh - 80px);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    padding: 40px 60px;
+}
+
+/* base glass card */
+.glass-box {
+    width: 360px;
+    min-height: 220px;
+    padding: 20px;
+
+    background: linear-gradient(135deg,
+            rgb(135, 155, 137),
+            rgba(255, 255, 255, 0.12));
+
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+
+    box-shadow:
+        0 18px 36px rgba(0, 0, 0, 0.22),
+        inset 0 1px 1px rgba(255, 255, 255, 0.5);
+
+    color: #000;
+}
+
+/* layout intent */
+.left-box {
+    margin-top: 40px;
+}
+
+.right-box {
+    position: sticky;
+    top: 100px;        /* 👈 same offset */
+    align-self: flex-start;
+}
+
+
+.right-box,
+.left-stack {
+    transition: transform 0.3s ease;
+}
+
+body:has(nav.scrolled) .right-box,
+body:has(nav.scrolled) .left-stack {
+    transform: scale(0.98);
+}
+
+/* typography */
+.glass-box h2 {
+    margin-bottom: 12px;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.glass-box p {
+    font-size: 14px;
+    opacity: 0.75;
+}
+
+.audio-player {
+    width: 100%;
+    padding: 18px;
+
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 16px;
+
+    box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.15),
+        inset 0 1px 1px rgba(255, 255, 255, 0.8);
+
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+/* track info */
+.track-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.cover {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: #dcdcdc;
+}
+
+.meta .title {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.meta .artist {
+    font-size: 12px;
+    opacity: 0.6;
+}
+
+/* progress bar */
+.progress-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+}
+
+.progress-bar {
+    flex: 1;
+    height: 4px;
+    background: #cfcfcf;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress {
+    width: 40%;
+    height: 100%;
+    background: #000;
+    border-radius: 10px;
+}
+
+/* controls */
+.controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+}
+
+.controls button {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.controls .play {
+    font-size: 22px;
+}
+
+.right-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 20px;
+    /* position: sticky; */
+}
+
+.small-video-wrapper {
+    outline: 2px solid red;
+     position: relative;
+    z-index: 10;
+}
+
+
+.small-video {
+    width: 260px;
+    /* 👈 control size */
+    max-height: 180px;
+
+    object-fit: contain;
+    /* ❗ NO CROP */
+    border-radius: 12px;
+
+    display: block;
+     position: relative;
+    z-index: 10;
+}
+
+/* TERMINAL BOX */
+.terminal-box {
+    padding: 0;
+    overflow: hidden;
+    min-height: 260px;
+}
+
+/* HEADER */
+.terminal-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: rgba(0,0,0,0.35);
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+
+.terminal-header .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.dot.red { background: #ff5f56; }
+.dot.yellow { background: #ffbd2e; }
+.dot.green { background: #27c93f; }
+
+.terminal-header .title {
+    margin-left: auto;
+    font-size: 12px;
+    opacity: 0.6;
+}
+
+/* BODY */
+.terminal-body {
+    padding: 14px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #00ff9c;
+    background: rgba(0,0,0,0.25);
+    height: 160px;
+    overflow-y: auto;
+}
+
+.terminal-body .line {
+    margin-bottom: 4px;
+}
+
+.line.success {
+    color: #7CFF7C;
+}
+
+.line.muted {
+    color: rgba(255,255,255,0.4);
+}
+
+/* INPUT */
+.terminal-input {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 14px;
+    background: rgba(0,0,0,0.4);
+    border-top: 1px solid rgba(255,255,255,0.15);
+}
+
+.terminal-input .prompt {
+    color: #00ff9c;
+}
+
+.terminal-input input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #00ff9c;
+    font-size: 13px;
+}
+
+.terminal-input input::placeholder {
+    color: rgba(0,255,156,0.4);
+}
+/* GITHUB REPO PANEL */
+.left-box {
+    margin-top: 40px;
+
+    display: flex;
+    flex-direction: column;
+
+    height: 420px;          /* 👈 fixed panel height */
+    /* position: sticky; */
+}
+
+
+#repoList {
+    list-style: none;
+    margin-top: 10px;
+    padding-right: 6px;
+
+    flex: 1;                /* 👈 takes remaining space */
+    overflow-y: auto;       /* 👈 scroll only here */
+}
+
+
+#repoList li {
+    margin-bottom: 8px;
+}
+
+#repoList a {
+    display: block;
+    width: 100%;
+
+    padding: 10px 12px;
+    border-radius: 10px;
+
+    background: rgba(255,255,255,0.55);
+    text-decoration: none;
+    color: #000;
+    font-size: 14px;
+
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+#repoList a:hover {
+    background:#ffbd2e;
+    transform: translateX(3px) translateY(1px);
+    font-style: italic;
+}
+
+
+/* scrollbar (optional but sexy) */
+#repoList::-webkit-scrollbar {
+    width: 6px;
+}
+#repoList::-webkit-scrollbar-thumb {
+    background: rgb(142, 142, 142);
+    border-radius: 10px;
+}
+
+
+/* MINI VISUALIZER STRIP */
+.visualizer-strip {
+    height: 48px;          /* a bit more breathing room */
+    margin-top: 40px;       /* 👈 push DOWN (was negative before) */
+    opacity: 0.75;
+
+    display: flex;
+    align-items: center;
+}
+
+
+/* CANVAS */
+#visualizer {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* VOLUME SLIDER */
+/* VOLUME TOGGLE */
+.volume-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* slider container illusion */
+#volume {
+    position: absolute;
+    bottom: 35%;                 /* sits above icon */
+    left: 100%;
+    transform: translateX(-50%) translateY(0px);
+
+    width: 80px;
+    height: 3px;
+    padding: 3px 3px;
+
+    background: rgba(255,255,255,0.65);
+    backdrop-filter: blur(1px);
+    border-radius: 9px;
+
+    opacity: 0;
+    pointer-events: none;
+
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    accent-color: #000;
+}
+
+/* show state */
+.volume-wrapper.show #volume {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* visible state */
+.volume-wrapper.show #volume {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+/* ===== MUSIC PLAYER GLOW ===== */
+
+.audio-player {
+    position: relative;
+    overflow: hidden;
+}
+
+/* glow layer */
+/* ===== MUSIC PLAYER MOVING GLOW ===== */
+
+.audio-player {
+    position: relative;
+    overflow: hidden;
+}
+
+/* main glow container */
+.player-glow {
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    top: -50%;
+    left: -50%;
+
+    opacity: 0;
+    filter: blur(80px);
+    transition: opacity 0.1s ease;
+    z-index: 0;
+}
+
+
+/* layered gradients */
+.player-glow::before,
+.player-glow::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+}
+
+/* pink → tomato */
+.player-glow::before {
+    background: radial-gradient(
+        circle at 30% 30%,
+        rgb(255, 124, 185),
+        rgb(195, 255, 208),
+        transparent 70%
+    );
+    animation: glowFloatA 18s ease-in-out infinite;
+}
+
+/* secondary softer layer */
+.player-glow::after {
+    background: radial-gradient(
+        circle at 70% 70%,
+        rgba(174, 255, 0, 0.755),
+        rgba(87, 187, 177, 0.716),
+        transparent 70%
+    );
+    animation: glowFloatB 2s ease-in-out infinite;
+}
+
+/* visible only when playing */
+.audio-player.playing .player-glow {
+    opacity: 1;
+}
+
+/* keep UI above glow */
+.audio-player > *:not(.player-glow) {
+    position: relative;
+    z-index: 1;
+}
+
+/* ===== ANIMATIONS ===== */
+
+@keyframes glowFloatA {
+    0%   { transform: translate(-10%, -10%) scale(1); }
+    50%  { transform: translate(15%, 10%) scale(1.03); }
+    100% { transform: translate(-10%, -10%) scale(1); }
+}
+
+@keyframes glowFloatB {
+    0%   { transform: translate(10%, 15%) scale(1.1); }
+    50%  { transform: translate(-15%, -10%) scale(1.2); }
+    100% { transform: translate(10%, 15%) scale(1.03); }
+}
+
+
+/* keep content above glow */
+.audio-player > *:not(.player-glow) {
+    position: relative;
+    z-index: 1;
+}
+
+/* active state */
+.audio-player.playing .player-glow {
+    opacity: 1;
+}
+
+/* slow dreamy motion */
+@keyframes glowMove {
+    0%   { transform: translate(-10%, -10%) scale(1); }
+    50%  { transform: translate(10%, 10%) scale(1.10); }
+    100% { transform: translate(-10%, -10%) scale(1); }
+}
+
+html {
+    scroll-behavior: smooth;
+    min-height: 200vh; /* 👈 FORCE SCROLL */
+
+}
+
+/* ===== PAGE SYSTEM ===== */
+
+.page {
+    min-height: 100vh;
+    padding: 120px 80px;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.page.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.glass-page {
+    background: linear-gradient(
+        135deg,
+        rgba(255,255,255,0.18),
+        rgba(255,255,255,0.05)
+    );
+    backdrop-filter: blur(22px);
+    border-top: 1px solid rgba(255,255,255,0.25);
+}
+
+.page h1 {
+    font-size: 42px;
+    margin-bottom: 20px;
+}
+
+.page p {
+    max-width: 620px;
+    line-height: 1.7;
+    opacity: 0.85;
+}
+
+.service-list {
+    list-style: none;
+    margin-top: 20px;
+}
+
+.service-list li {
+    padding: 10px 0;
+    font-size: 16px;
+}
+
+.muted {
+    opacity: 0.6;
+}
+/* ===== BACKGROUND VIDEO BLUR CONTROL ===== */
+
+.bg-video {
+    transition: filter 0.9s ease, opacity 1.9s ease;
+}
+
+/* blurred when NOT on home */
+.bg-video.blurred {
+    filter: blur(10px) brightness(.9);
+}
+
+
+p{
+    color:white;
+}
+
+
+.right-stack {
+    display: flex;
+    flex-direction: column;
+}
+
+/* sticky wrapper */
+.right-sticky {
+    /* position: fixed; */
+    top: 100px;           /* below navbar */
+    align-self: flex-start;
+    z-index: 20;
+}
+
+/* terminal scrolls normally */
+.right-scroll {
+    margin-top: 20px;
+}
+
+
+/* ===== PAGE SECTIONS ===== */
+
+.page {
+    min-height: 100vh;
+    width: 100%;
+    padding: 100px 80px;
+    color: #000;
+}
+
+/* HOME already handled by .content – leave it alone */
+#home.page {
+    /* padding: 0; */
+}
+
+/* Glass-style pages */
+.glass-page {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+    max-width: 900px;
+    margin: 0 auto;
+
+    padding: 60px 70px;
+
+    background: linear-gradient(
+        135deg,
+        rgba(255,255,255,0.14),
+        rgba(255,255,255,0.04)
+    );
+
+    backdrop-filter: blur(26px) saturate(160%);
+    -webkit-backdrop-filter: blur(26px) saturate(160%);
+
+    border-radius: 26px;
+    border: 1px solid rgba(255,255,255,0.22);
+
+    box-shadow:
+        0 30px 60px rgba(0,0,0,0.35),
+        inset 0 1px 1px rgba(255,255,255,0.25);
+}
+.page h1 {
+    font-size: 44px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #fff;
+}
+.page h1 {
+    text-shadow: 0 0 14px rgba(255,255,255,0.15);
+}
+.page p {
+    max-width: 640px;
+    line-height: 1.75;
+    font-size: 16px;
+    color: rgba(255,255,255,0.9);
+}
+.service-list {
+    list-style: none;
+    margin-top: 20px;
+    max-width: 520px;
+}
+
+.service-list li {
+    padding: 14px 0;
+    font-size: 16px;
+    color: rgba(255,255,255,0.9);
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+}
+
+.service-list li::before {
+    content: "—";
+    color: rgba(255,255,255,0.5);
+}
+
+
+.page a {
+    color: #00ff9c;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.page a:hover {
+    text-decoration: underline;
+}
+.page {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.page.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+/* ===== TYPEWRITER EFFECT ===== */
+
+.typewriter {
+    color: white;
+    font-size: 16px;
+    line-height: 1.7;
+    max-width: 620px;
+    white-space: pre-wrap;
+}
+
+/* blinking caret */
+.typewriter::after {
+    content: "▍";
+    margin-left: 4px;
+    animation: blink 1s steps(1) infinite;
+}
+
+.typewriter.done::after {
+    display: none;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
+
+/* ===== ABOUT TECH STACK (POST-TYPEWRITER) ===== */
+
+
+.tech-stack {
+    margin-top: 40px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+}
+
+.tech-stack.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+    transition: opacity 0.9s ease, transform 0.9s ease;
+}
+
+
+.tech {
+    padding: 10px 16px;
+    border-radius: 14px;
+
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(10px);
+
+    color: white;
+    font-size: 14px;
+    letter-spacing: 0.04em;
+
+    opacity: 0;
+    transform: translateY(18px) scale(0.96);
+    filter: blur(6px);
+
+    transition:
+        opacity 0.6s ease,
+        transform 0.6s ease,
+        filter 0.6s ease,
+        box-shadow 0.6s ease;
+}
+
+.tech.show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+
+    box-shadow:
+        0 0 50px rgba(255,255,255,0.35),
+        inset 0 0 12px rgba(255,255,255,0.15);
+}
+
+
+
+/* activated state */
+.tech-stack.show .tech {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    animation: techGlow 1.8s ease forwards;
+}
+
+/* subtle glow pulse */
+@keyframes techGlow {
+    0% {
+        box-shadow: 0 0 0 rgba(255,255,255,0);
+    }
+    40% {
+        box-shadow: 0 0 22px rgba(255,255,255,0.18);
+    }
+    100% {
+        box-shadow:
+            0 10px 25px rgba(0,0,0,0.18),
+            inset 0 1px 1px rgba(255,255,255,0.35);
+    }
+}
+
+
+/* ===== CURSOR BLUR AURA ===== */
+
+.cursor-blur {
+    position: fixed;
+    top: 80px;
+    left: 80px;
+
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+
+    pointer-events: none;
+    z-index: 9999;
+    
+
+    backdrop-filter: blur(1px) saturate(120%);
+    -webkit-backdrop-filter: blur(18px) saturate(120%);
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,255,255,0.18),
+            rgba(255,255,255,0.08) 40%,
+            rgba(255,255,255,0.02) 70%,
+            transparent 75%
+        );
+
+    transform: translate(-50%, -50%);
+    opacity: 0;
+
+    transition:
+        opacity 0.25s ease,
+        width 0.3s ease,
+        height 0.3s ease;
+}
+
+.glass-box:hover ~ .cursor-blur {
+    width: 220px;
+    height: 220px;
+}
+
+p:hover ~ .cursor-blur {
+    width: 140px;
+    height: 140px;
+}
+nav a[target="_blank"]::after {
+    content: "↑";
+
+    font-size: 1em;
+    opacity: 1;
+}

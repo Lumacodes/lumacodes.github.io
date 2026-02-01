@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luma Captures</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="favicon.png">
+</head>
+
+<div class="cursor-blur"></div>
+
+<body>
+
+    <nav>
+        <div class="menu">
+            <div class="logo">
+                <a href="#home">lumacodeshere</a>
+            </div>
+            <ul>
+                <li><a href="#home">HOME</a></li>
+                <li><a href="#about">ABOUT</a></li>
+                <li><a href="#services">SERVICES</a></li>
+                <li><a href="#contact">CONTACT</a></li>
+                <li>
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdMXlS8iS9YnYKynPAFgVI7rzT5W4haMRAeEZf2xzp9_cSBxA/viewform?usp=publish-editor"
+                        target="_blank" rel="noopener noreferrer">
+                        FEEDBACK
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+    </nav>
+
+    <video autoplay muted loop playsinline class="bg-video">
+
+        <source src="bg.webm" type="video/webm">
+    </video>
+    <div class="bg-gradient"></div>
+
+    <!-- ===== HOME ===== -->
+    <section id="home" class="page content show">
+
+        <div class="left-stack">
+            <div class="glass-box left-box">
+                <h2>GitHub Repos</h2>
+                <ul id="repoList"></ul>
+            </div>
+
+            <div class="visualizer-strip">
+                <canvas id="visualizer"></canvas>
+            </div>
+        </div>
+
+        <div class="right-stack">
+
+            <!-- STICKY ZONE -->
+            <div class="right-sticky">
+                <div class="music-fixed">
+                    <div class="glass-box right-box">
+                        <h2>Music Player</h2>
+
+                        <div class="audio-player">
+                            <div class="player-glow"></div>
+
+                            <audio id="audio"></audio>
+
+                            <div class="track-info">
+                                <div class="meta">
+                                    <div class="title" id="title">Track</div>
+                                    <div class="artist" id="artist">Artist</div>
+                                </div>
+                            </div>
+
+                            <div class="progress-container">
+                                <span id="currentTime">0:00</span>
+                                <div class="progress-bar" id="progressBar">
+                                    <div class="progress" id="progress"></div>
+                                </div>
+                                <span id="duration">0:00</span>
+                            </div>
+
+                            <div class="controls">
+                                <button id="prev">⏮</button>
+                                <button id="play">▶</button>
+                                <button id="next">⏭</button>
+
+                                <div class="volume-wrapper">
+                                    <button id="volumeToggle">🕪</button>
+                                    <input type="range" id="volume" min="0" max="100">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- SCROLLING ZONE -->
+            <div class="right-scroll">
+                <div class="glass-box terminal-box">
+                    <div class="terminal-header">
+                        <span class="dot red"></span>
+                        <span class="dot yellow"></span>
+                        <span class="dot green"></span>
+                        <span class="title">Luma AI</span>
+                    </div>
+
+                    <div class="terminal-body" id="terminalBody">
+                        <div class="line">$./Luma_AI.sh</div>
+                        <div class="line success">✔ system ready</div>
+                        <div class="line">✱ Say "Hi"</div>
+
+                    </div>
+
+                    <div class="terminal-input">
+                        <span class="prompt">$</span>
+                        <input id="terminalInput" placeholder="type command">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ===== ABOUT ===== -->
+    <section id="about" class="page glass-page">
+        <h1>About</h1>
+
+        <p class="typewriter"
+            data-text="Luma is a Massgod — a persona created by someone deeply passionate about programming and self-expression through their online presence">
+        </p>
+        <div class="tech-stack">
+            <div class="tech">C</div>
+            <div class="tech">Bash</div>
+            <div class="tech">JavaScript</div>
+            <div class="tech">Figma</div>
+            <div class="tech">Linux</div>
+            <div class="tech">OpenAI</div>
+            <div class="tech">HTML</div>
+            <div class="tech">CSS</div>
+        </div>
+
+    </section>
+
+
+    <!-- ===== SERVICES ===== -->
+    <section id="services" class="page glass-page">
+        <h1>Services</h1>
+        <ul class="service-list">
+            <li>Frontend Devoloper</li>
+            <li>Dev Ops Enggineer</li>
+            <li>Music Production Inctructor</li>
+            <li>Audio Enggineer</li>
+        </ul>
+    </section>
+
+    <!-- ===== CONTACT ===== -->
+    <section id="contact" class="page glass-page">
+        <h1>Contact</h1>
+        <p>Email: <span class="muted">lumacodes@proton.me</span></p>
+        <p>GitHub: <span class="muted">github.com/lumacodes</span></p>
+        <!-- <p>Insta: <span class="muted">@luma.codes</span></p> -->
+        <p>X: <span class="muted">@lumacodes</span></p>
+    </section>
+
+    <!-- ===== FEEDBACK ===== -->
+    <!-- <section id="feedback" class="page glass-page">
+        <h1>Feedback</h1>
+        <p>
+            This project evolves with feedback.
+            Ideas, bugs, or just vibes — all welcome.
+        </p>
+    </section> -->
+
+    <script src="script.js"></script>
+</body>
+
+</html>
