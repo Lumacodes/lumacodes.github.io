@@ -637,6 +637,11 @@ html {
 
 }
 
+html, body {
+  min-width: 1200px;
+  overflow-x: auto;
+}
+
 /* ===== PAGE SYSTEM ===== */
 
 .page {
@@ -974,3 +979,4 @@ nav a[target="_blank"]::after {
     font-size: 1em;
     opacity: 1;
 }
+
