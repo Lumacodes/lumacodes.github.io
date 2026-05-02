@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="luma — developer, music producer, audio engineer. building things that feel alive." />
+  <title>luma</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- noise overlay -->
+  <div class="noise"></div>
+
+  <!-- custom cursor -->
+  <div id="cursor"></div>
+
+  <!-- ── NAV ─────────────────────────────────────────────────── -->
+  <nav id="nav">
+    <a class="nav-logo" href="#home">lumacodes<span class="blink-cursor">_</span></a>
+    <ul class="nav-links">
+      <li><a href="#home">~</a></li>
+      <li><a href="#about">about</a></li>
+      <li><a href="#work">work</a></li>
+      <li><a href="#repos">repos</a></li>
+      <li><a href="#terminal">terminal</a></li>
+      <li><a href="#contact">contact</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="menu">☰</button>
+    <div class="nav-mobile" id="nav-mobile">
+      <a href="#home">home</a>
+      <a href="#about">about</a>
+      <a href="#work">work</a>
+      <a href="#repos">repos</a>
+      <a href="#terminal">terminal</a>
+      <a href="#contact">contact</a>
+    </div>
+  </nav>
+
+  <!-- ── HERO ────────────────────────────────────────────────── -->
+  <section id="home">
+    <canvas id="bg-canvas"></canvas>
+    <div class="hero-inner">
+      <p class="hero-pre">// hello world</p>
+      <h1 class="hero-name">luma<span class="accent">.</span></h1>
+      <p class="hero-sub" id="hero-sub"><span id="typed-text"></span><span class="blink-cursor">_</span></p>
+      <p class="hero-desc">
+        developer · music producer · audio engineer<br/>
+        <span class="muted">building things on the web that feel alive (｡•̀ᴗ-)✧</span>
+      </p>
+      <div class="hero-btns">
+        <a href="#work" class="btn-pill">my work</a>
+        <a href="#terminal" class="btn-ghost-pill">say hi →</a>
+      </div>
+    </div>
+    <div class="scroll-cue">scroll ↓</div>
+  </section>
+
+  <!-- ── ABOUT ───────────────────────────────────────────────── -->
+  <section id="about" class="section">
+    <div class="wrap">
+      <p class="sec-tag">// about</p>
+      <div class="about-split">
+        <div class="about-left">
+          <h2 class="sec-h">who am i?</h2>
+          <p class="body-text">
+            hey— i'm luma. a self-taught developer with a soft spot for clean interfaces, good music, and late-night coding sessions. i live at the intersection of code and sound.
+          </p>
+          <p class="body-text">
+            when i'm not pushing pixels i'm producing music, engineering audio, or teaching music production. i build things in public and care deeply about craft.
+          </p>
+          <p class="body-text muted">pronouns: he/him &nbsp;·&nbsp; timezone: IST &nbsp;·&nbsp; status: <span class="status-dot"></span> <span class="accent">available</span></p>
+          <div class="tags-row">
+            <span class="tag">react</span><span class="tag">typescript</span>
+            <span class="tag">python</span><span class="tag">node.js</span>
+            <span class="tag">web audio api</span><span class="tag">css</span>
+            <span class="tag">figma</span><span class="tag">ableton</span>
+          </div>
+        </div>
+        <div class="about-right">
+          <div class="glass-card stat-card">
+            <div class="stat-row"><span class="stat-label">projects built</span><span class="stat-val accent">20+</span></div>
+            <div class="stat-row"><span class="stat-label">years coding</span><span class="stat-val accent">3+</span></div>
+            <div class="stat-row"><span class="stat-label">music tracks</span><span class="stat-val accent">∞</span></div>
+            <div class="stat-row"><span class="stat-label">open source</span><span class="stat-val accent">100%</span></div>
+            <div class="stat-row"><span class="stat-label">coffee today</span><span class="stat-val muted">too many</span></div>
+          </div>
+          <div class="glass-card vibe-card">
+            <p class="vibe-title">current vibe</p>
+            <p class="vibe-text">lo-fi · late night · building in public</p>
+            <p class="muted small">listening to something good →</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── WORK ────────────────────────────────────────────────── -->
+  <section id="work" class="section">
+    <div class="wrap">
+      <p class="sec-tag">// work</p>
+      <h2 class="sec-h">things i've made</h2>
+      <div class="work-grid">
+        <div class="glass-card work-card" id="wc-0">
+          <div class="work-card-header">
+            <span class="work-tag frontend">frontend</span>
+            <div class="work-links">
+              <a href="https://luma.is-a.dev" target="_blank" title="live site"><i class="fas fa-external-link-alt"></i></a>
+              <a href="https://github.com/Lumacodes/lumacodes.github.io" target="_blank" title="source"><i class="fab fa-github"></i></a>
+            </div>
+          </div>
+          <h3 class="work-title">lumacodes.github.io</h3>
+          <p class="work-desc">my personal portfolio — built with zero frameworks. features a web audio visualizer, AI terminal, live github api integration, and a curated music player.</p>
+          <div class="work-tech"><span>html</span><span>css</span><span>js</span><span>web audio api</span></div>
+        </div>
+        <div class="glass-card work-card" id="wc-1">
+          <div class="work-card-header">
+            <span class="work-tag ai">AI</span>
+            <div class="work-links">
+              <a href="https://github.com/Lumacodes" target="_blank"><i class="fab fa-github"></i></a>
+            </div>
+          </div>
+          <h3 class="work-title">AI companion</h3>
+          <p class="work-desc">a real-time 3D VTuber companion with lip-sync, emotional awareness, and conversational memory. react + three.js + openrouter.</p>
+          <div class="work-tech"><span>react</span><span>three.js</span><span>typescript</span><span>llm</span></div>
+        </div>
+        <div class="glass-card work-card" id="wc-2">
+          <div class="work-card-header">
+            <span class="work-tag audio">audio</span>
+            <div class="work-links">
+              <a href="https://github.com/Lumacodes" target="_blank"><i class="fab fa-github"></i></a>
+            </div>
+          </div>
+          <h3 class="work-title">audio tools</h3>
+          <p class="work-desc">a growing collection of browser-based audio utilities — waveform viewers, spectrum analyzers, and generative music experiments using the web audio api.</p>
+          <div class="work-tech"><span>web audio api</span><span>canvas</span><span>js</span></div>
+        </div>
+        <div class="glass-card work-card" id="wc-3">
+          <div class="work-card-header">
+            <span class="work-tag devops">devops</span>
+            <div class="work-links">
+              <a href="https://github.com/Lumacodes" target="_blank"><i class="fab fa-github"></i></a>
+            </div>
+          </div>
+          <h3 class="work-title">open source utils</h3>
+          <p class="work-desc">cli tools, automation scripts, and dev utilities. built in public, maintained with care. because good tooling makes everything else better.</p>
+          <div class="work-tech"><span>python</span><span>node.js</span><span>bash</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── GITHUB REPOS ─────────────────────────────────────────── -->
+  <section id="repos" class="section">
+    <div class="wrap">
+      <p class="sec-tag">// github</p>
+      <h2 class="sec-h">recent repos</h2>
+      <div class="repos-grid" id="repos-grid">
+        <div class="repo-loading">fetching repos from github<span class="dot-flash">...</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TERMINAL ─────────────────────────────────────────────── -->
+  <section id="terminal" class="section">
+    <div class="wrap">
+      <p class="sec-tag">// terminal</p>
+      <h2 class="sec-h">chat with luma<span class="accent">_</span></h2>
+      <p class="body-text muted" style="margin-bottom:32px;">i have a little AI persona living in here. say hi, ask something, or try <code class="inline-code">help</code>.</p>
+      <div class="terminal-wrap glass-card" id="terminal-wrap">
+        <div class="terminal-bar">
+          <span class="t-dot t-red"></span>
+          <span class="t-dot t-yellow"></span>
+          <span class="t-dot t-green"></span>
+          <span class="t-title">luma@portfolio:~</span>
+        </div>
+        <div class="terminal-body" id="terminal-body">
+          <div class="t-line"><span class="t-prompt">luma ~</span> <span class="t-cmd">whoami</span></div>
+          <div class="t-output">hey!! i'm luma's AI lil clone (｡•̀ᴗ-)✧ ask me anything~ type <span class="accent">help</span> to see what i can do!</div>
+        </div>
+        <div class="terminal-input-row">
+          <span class="t-prompt">luma ~</span>
+          <input type="text" id="terminal-input" class="terminal-input" placeholder="type something..." autocomplete="off" spellcheck="false" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CONTACT ──────────────────────────────────────────────── -->
+  <section id="contact" class="section">
+    <div class="wrap contact-center">
+      <p class="sec-tag">// contact</p>
+      <h2 class="sec-h">let's connect<span class="accent">.</span></h2>
+      <p class="body-text muted contact-sub">
+        open to dev projects, music collabs, audio engineering gigs, or just a good conversation. reach out — i don't bite ♡
+      </p>
+      <div class="contact-links">
+        <a href="mailto:lumacodes@proton.me" class="contact-btn" id="contact-email">
+          <i class="fas fa-envelope"></i> lumacodes@proton.me
+        </a>
+        <a href="https://github.com/Lumacodes" target="_blank" class="contact-btn" id="contact-github">
+          <i class="fab fa-github"></i> github.com/lumacodes
+        </a>
+        <a href="https://twitter.com/lumacodes" target="_blank" class="contact-btn" id="contact-twitter">
+          <i class="fab fa-x-twitter"></i> @lumacodes
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ───────────────────────────────────────────────── -->
+  <footer class="footer">
+    <span class="muted small">built with ♡ by luma · vanilla js · open source · no tracking</span>
+    <span class="muted small">© 2025</span>
+  </footer>
+
+  <!-- ── MUSIC PLAYER ──────────────────────────────────────────── -->
+  <div id="music-player" class="glass-card">
+    <canvas id="visualizer"></canvas>
+    <div class="player-inner">
+      <div class="player-track">
+        <span class="player-status" id="player-status">♪ now playing</span>
+        <p class="track-title" id="track-title">Intermolecular Lullaby</p>
+        <p class="track-artist" id="track-artist">Chime</p>
+      </div>
+      <div class="player-controls">
+        <button id="btn-prev" title="prev"><i class="fas fa-backward-step"></i></button>
+        <button id="btn-play" title="play/pause"><i class="fas fa-play" id="play-icon"></i></button>
+        <button id="btn-next" title="next"><i class="fas fa-forward-step"></i></button>
+      </div>
+      <div class="player-progress">
+        <span id="current-time" class="time">0:00</span>
+        <div class="progress-bar" id="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <span id="duration" class="time">0:00</span>
+      </div>
+      <div class="player-vol-row">
+        <button id="vol-toggle" title="volume"><i class="fas fa-volume-high" id="vol-icon"></i></button>
+        <input type="range" id="vol-slider" min="0" max="1" step="0.01" value="0.7" class="vol-slider" />
+      </div>
+    </div>
+    <audio id="audio" crossorigin="anonymous"></audio>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
