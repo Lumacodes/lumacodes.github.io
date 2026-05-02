@@ -74,12 +74,6 @@ img { display: block; max-width: 100%; }
   background: rgba(201,184,255,0.1);
   border-color: var(--accent);
 }
-/* Hide custom cursor on touch devices — use system pointer instead */
-@media (hover: none) {
-  #cursor { display: none !important; }
-  html, body, a, button, input, select, textarea { cursor: auto !important; }
-  a, button { cursor: pointer !important; }
-}
 
 /* ── GLASS CARD ─────────────────────────────────────────────── */
 .glass-card {
