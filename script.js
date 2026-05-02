@@ -11,21 +11,18 @@ const OPENROUTER_MODEL   = 'mistralai/mistral-7b-instruct';
 
 // ── CURSOR (desktop only — hidden on touch via CSS) ──────────────
 const cursor = document.getElementById('cursor');
-const isTouchDevice = window.matchMedia('(hover: none)').matches;
 
-if (!isTouchDevice) {
-  document.addEventListener('mousemove', e => {
-    cursor.style.transform = `translate(calc(${e.clientX}px - 50%), calc(${e.clientY}px - 50%))`;
-  }, { passive: true });
+document.addEventListener('mousemove', e => {
+  cursor.style.transform = `translate(calc(${e.clientX}px - 50%), calc(${e.clientY}px - 50%))`;
+}, { passive: true });
 
-  // Expand on hover — event delegation, handles dynamically added elements
-  document.addEventListener('mouseover', e => {
-    cursor.classList.toggle(
-      'hovered',
-      !!e.target.closest('a, button, input, .repo-card, .work-card, .progress-bar, .vol-slider, label')
-    );
-  }, { passive: true });
-}
+// Expand on hover — event delegation, handles dynamically added elements
+document.addEventListener('mouseover', e => {
+  cursor.classList.toggle(
+    'hovered',
+    !!e.target.closest('a, button, input, .repo-card, .work-card, .progress-bar, .vol-slider, label')
+  );
+}, { passive: true });
 
 // ── NAV SCROLL ───────────────────────────────────────────────
 const nav = document.getElementById('nav');
@@ -199,23 +196,8 @@ document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
     {
       title: 'Lofi Study',
       artist: 'Chill Beats',
-      src: 'https://cdn.pixabay.com/audio/2022/10/25/audio_fbc9ad9685.mp3',
-    },
-    {
-      title: 'Late Night Cafe',
-      artist: 'Lo-Fi Vibes',
-      src: 'https://cdn.pixabay.com/audio/2023/06/19/audio_ac33e1e77c.mp3',
-    },
-    {
-      title: 'Rainy Day',
-      artist: 'Chill Mix',
-      src: 'https://cdn.pixabay.com/audio/2022/10/30/audio_cbcb6b5a83.mp3',
-    },
-    {
-      title: 'Soft Focus',
-      artist: 'Ambient Works',
-      src: 'https://cdn.pixabay.com/audio/2023/02/28/audio_1de505f848.mp3',
-    },
+      src: './lofi.mp3',
+    }
   ];
 
   let currentTrack = 0;
